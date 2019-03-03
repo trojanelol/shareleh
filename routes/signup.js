@@ -1,10 +1,51 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 
 router.post('/', function(req, res, next) {
-//   res.render('signup', { title: 'Signup' });
-    res.send('Sign up')
+    const { Pool } = require('pg')
+    const pool = new Pool({
+        user: 'postgres',
+        host: 'localhost',
+        database: 'shareleh',
+        password: '9909',
+        port: 5432,
+    })
 
+    storeUserInDB(pool, res)
+
+    //TODO
+    //No duplicates
+    //Hash the password
+    //Find out if creating and importing a global pool is possible and how
+    //use the .env file
+    //redirect user instead of sending a json response
 });
 
-module.exports = router;
+function storeUserInDB(pool, res){
+    
+    var userEmail = 'jh@shareleh.com'
+    var userPassword = '1234'
+    var select_query = 'SELECT * FROM users'
+    var insert_query = "INSERT INTO users (email, password) VALUES ('" + userEmail + "', '" + userPassword + "');"
+
+    pool.query(insert_query, function(err, data) {
+        if (err) {
+            console.error('Error executing query', err.stack)
+            return
+        }
+
+        //Chaining Queries
+        pool.query(select_query, function(err, data) {
+            if (err) {
+                console.error('Error executing query', err.stack)
+                return
+            }
+
+            res.send(data)
+        })
+    })
+
+}
+
+
+module.exports = router
