@@ -4,11 +4,13 @@ var router = express.Router()
 router.post('/', function(req, res, next) {
     const { Pool } = require('pg')
     const pool = new Pool({
-        user: 'postgres',
-        host: 'localhost',
-        database: 'shareleh',
-        password: '9909',
-        port: 5432,
+        // these variables will searched for in the .env file
+        // make a copy of .env.sample and rename it to .env, then fill in the variables with your own postgres username and password
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_DATABASE,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
     })
 
     storeUserInDB(pool, res)
