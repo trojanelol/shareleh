@@ -8,6 +8,14 @@ var app = express();
 require('dotenv').load();
 require('dotenv').config();
 
+var bodyParser = require('body-parser');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
 // Postgres
 const { Pool } = require('pg');
 const pool = new Pool({
