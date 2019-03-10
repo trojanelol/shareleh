@@ -2,13 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  console.log("======================================== req ========================================");
-  console.log(req);
-  console.log("======================================== res ========================================");
-  console.log(res);
-  console.log("======================================== next ========================================");
-  console.log(next);
-  res.render('secret', { title: 'Secret'});
+  const expressport = process.env.PORT || 3000;
+  res.render('secret', { expressport: expressport});
 });
 
 module.exports = router;
