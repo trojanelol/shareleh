@@ -22,6 +22,7 @@ var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
 var signInRouter = require('./routes/signin');
 var signUpRouter = require('./routes/signup');
+var secretRouter = require('./routes/secret');
 
 var app = express();
 
@@ -51,6 +52,7 @@ app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
 app.use('/signin', signInRouter);
 app.use('/signup', signUpRouter);
+app.use('/secret', secretRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
