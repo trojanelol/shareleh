@@ -15,4 +15,5 @@ create table Orders (
     orderdate   varchar(10),
     quantity    integer,
     DeliveryStatus  varchar(10),
+    primary key(oid)
 );
