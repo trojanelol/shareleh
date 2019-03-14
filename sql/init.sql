@@ -6,3 +6,13 @@ create table Users (
     phone       integer,
     primary key(cid)   
 );
+
+create table Orders (
+    oid         integer not null,
+    pid         integer,
+    coid        integer,
+    cid         integer,
+    orderdate   varchar(10),
+    quantity    integer,
+    DeliveryStatus  varchar(10),
+);
