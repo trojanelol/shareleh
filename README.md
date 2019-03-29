@@ -19,6 +19,6 @@ Later on you can reference these variables in your code by calling `process.env.
 # Running the website
 To start the server, run
 ```
-npx nodemon --exec npm start
+npm start
 ```
 and visit `0.0.0.0:3000`
