@@ -14,7 +14,7 @@ DB_DATABASE=shareleh
 DB_PASSWORD=
 DB_PORT=5432
 ```
-Later on you can reference these variables in your code by calling `process.env.<variable_name>`.
+Later on you can reference these variables in your code by calling `process.env.<variable_name>`, e.g. `process.env.DB_PASSWORD`.
 
 # Running the website
 To start the server, run
