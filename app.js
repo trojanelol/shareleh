@@ -11,108 +11,28 @@ var app = express();
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt')
-passport.use(new LocalStrategy(
-  (username, password, done) => {
-    // function callback(err, user) {
-    //   if (err) {
-    //     return done(err);
-    //   }
-    //   // User not found
-    //   if (!user) {
-    //     console.error('User not found');
-    //     return done(null, false);
-    //   }
-    //   // Always use hashed passwords and fixed time comparison
-    //   bcrypt.compare(password, user.passwordHash, (err, isValid) => {
-    //     if (err) {
-    //       return done(err);
-    //     }
-    //     if (!isValid) {
-    //       return done(null, false);
-    //     }
-    //     return done(null, user);
-    //   })
-    // }
-    function callback(err, user) {
-      if (err) return done(err);
-      if (!user) return done(null, false); // User not found
-      bcrypt.compare(password, user.passwordHash, (err, isValid) => {
-        if (err) return done(err);
-        if (!isValid) return done(null, false);
-        return done(null, user);
-      })
-    }
-    pool.query(
-      'SELECT * FROM users WHERE username=$1',
-      [username],
-      (err, data) => {
-        if(err) return callback(null); // cannot find user
-        if(data.rows.length == 0) {
-          console.error("User does not exists?");
-          return callback(null)
-        } else if(data.rows.length == 1) {
-          return callback(null, {
-            username    : data.rows[0].username,
-            passwordHash: data.rows[0].password,
-            firstname   : data.rows[0].first_name,
-            lastname    : data.rows[0].last_name,
-            status      : data.rows[0].status
+passport.use(new LocalStrategy((username, password, done) => {
+  pool.query(
+    'SELECT * FROM users WHERE username=$1',
+    [username],
+    (err, data) => {
+      if (err || data.rows.length != 1)
+        return done(err);
+      else {
+        bcrypt.compare(password, data.rows[0]['password'], (err, isValid) => {
+          if (err) return done(err);
+          if (!isValid) return done(null, false);
+          return done(null, {
+            username: data.rows[0]['username'],
+            passwordHash: data.rows[0]['password']
           });
-        } else {
-          console.error("More than one user?");
-          return callback(null);
-        }
-      });
-  }
-));
-// function findUser (username, callback) {
-//   pool.query(sql_query.query.userpass, [username], (err, data) => {
-//     if(err) {
-//       console.error("Cannot find user");
-//       return callback(null);
-//     }
-//
-//     if(data.rows.length == 0) {
-//       console.error("User does not exists?");
-//       return callback(null)
-//     } else if(data.rows.length == 1) {
-//       return callback(null, {
-//         username    : data.rows[0].username,
-//         passwordHash: data.rows[0].password,
-//         firstname   : data.rows[0].first_name,
-//         lastname    : data.rows[0].last_name,
-//         status      : data.rows[0].status
-//       });
-//     } else {
-//       console.error("More than one user?");
-//       return callback(null);
-//     }
-//   });
-// }
-// passport.use(new LocalStrategy(
-//   (username, password, done) => {
-//     findUser(username, (err, user) => {
-//       if (err) {
-//         return done(err);
-//       }
-//       // User not found
-//       if (!user) {
-//         console.error('User not found');
-//         return done(null, false);
-//       }
-//       // Always use hashed passwords and fixed time comparison
-//       bcrypt.compare(password, user.passwordHash, (err, isValid) => {
-//         if (err) {
-//           return done(err);
-//         }
-//         if (!isValid) {
-//           return done(null, false);
-//         }
-//         return done(null, user);
-//       })
-//     })
-//   }
-// ));
+        })
+      }
+    }
+  );
+}));
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 
 require('dotenv').load();
 require('dotenv').config();
@@ -211,13 +131,20 @@ app.get('/zzlogin', function(req, res, next) {
   </form>
   `);
 });
-app.post('/zzlogin', function(req, res, next) {
-  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
-  res.send(`
-  username is: ${req.body['username']}<br>
-  password is: ${req.body['password']}<br>
-  `);
-});
+app.post(
+  '/zzlogin', 
+  passport.authenticate('local'), 
+  function(req, res, next) {
+    // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+    res.send(`
+    <h1>Login Success</h1>
+    <pre>
+    username is : ${req.body['username']}<br>
+    password is : ${req.body['password']}<br>
+    </pre>
+    `);
+  }
+);
 
 //----------//
 // zzSignup //
