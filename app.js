@@ -1,16 +1,45 @@
-var createError = require('http-errors');
 var express = require('express');
+var app = express();
+var session = require('express-session')
+app.use(session({
+  secret: 'somerandomstring',
+  name: 'cookie_name',
+  proxy: true,
+  resave: false,
+  saveUninitialized: false
+}));
+var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+require('dotenv').load();
+require('dotenv').config();
 
-//----------------//
-// Authentication //
-//----------------//
+//==========//
+// Postgres //
+//==========//
+const { Pool } = require('pg');
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT
+});
+
+//------------//
+// Passportjs //
+//------------//
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt')
+app.use(passport.initialize());
+app.use(passport.session())
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 passport.use(new LocalStrategy((username, password, done) => {
   pool.query(
     'SELECT * FROM users WHERE username=$1',
@@ -31,32 +60,96 @@ passport.use(new LocalStrategy((username, password, done) => {
     }
   );
 }));
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+app.use(function (req, res, next) {
+  res.locals.signedin = req.isAuthenticated();
+  next();
+});
 
-require('dotenv').load();
-require('dotenv').config();
+//----------//
+// zzsignup //
+//----------//
+app.get('/zzsignup', function(req, res, next) {
+  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+  res.send(`
+  <h1>zzSignUp</h1>
+  <form action="/zzsignup", method="post">
+    <label for="username">username: </label>
+    <input type="text" name="username" autocomplete="off">
+    <br>
+    <label for="password">password: </label>
+    <input type="text" name="password" autocomplete="off">
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+  `);
+});
+app.post('/zzsignup', function zzsignup(req, res, next) {
+  var username  = req.body['username'];
+  var password  = bcrypt.hashSync(req.body['password'], bcrypt.genSaltSync(10));
+  pool.query(
+    'INSERT INTO users (username, password) VALUES ($1, $2)',
+    [username, password],
+    (err, data) => {
+      if(err) {
+        res.send(`
+        <h1>zzSignup failure</h1>
+        ${JSON.stringify(err)}
+        <pre><a href="javascript:history.back()">Go back.</a></pre>
+        `);
+      } else {
+        res.send(`
+        <h1>zzSignup success, check the database</h1>
+        <pre><a href="javascript:history.back()">Go back.</a></pre>
+        `);
+      }
+    }
+  );
+});
 
-var bodyParser = require('body-parser');
-
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// parse application/json
-app.use(bodyParser.json());
-
-// initialize passport
-app.use(passport.initialize());
-app.use(passport.session())
-
-// Postgres
-const { Pool } = require('pg');
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT
+//----------//
+// zzsignin //
+//----------//
+app.get('/zzsignin', function(req, res, next) {
+  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+  res.send(`
+  <h1>zzsignin</h1>
+  <form action="/zzsignin", method="post">
+    <label for="username">username: </label>
+    <input type="text" name="username" autocomplete="off">
+    <br>
+    <label for="password">password: </label>
+    <input type="text" name="password" autocomplete="off">
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+  `);
+});
+app.post(
+  '/zzsignin',
+  passport.authenticate('local', { failureRedirect: '/signinfail' } ),
+  function(req, res, next) {
+    // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+    res.redirect('/');
+    // res.send(`
+    // <h1>Login Success</h1>
+    // <pre>
+    // username is : ${req.body['username']}<br>
+    // password is : ${req.body['password']}<br>
+    // <a href="/">Return home.</a>
+    // </pre>
+    // `);
+  }
+);
+app.get('/signinfail', function(req, res, next) {
+  res.send(`
+  <pre>
+  Sorry, your username or password is incorrect. <a href="javascript:history.back()">Go back.</a>
+  </pre>
+  `);
+});
+app.get('/signout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
 // GET testdb : Test database connection
@@ -112,73 +205,6 @@ app.post('/secret/query', (req, res) => {
 
 // Route get requests to /secret
 app.use('/secret', require('./routes/secret'));
-
-//---------//
-// zzLogin //
-//---------//
-app.get('/zzlogin', function(req, res, next) {
-  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
-  res.send(`
-  <h1>zzLogin</h1>
-  <form action="/zzlogin", method="post">
-    <label for="username">username: </label>
-    <input type="text" name="username" autocomplete="off">
-    <br>
-    <label for="password">password: </label>
-    <input type="text" name="password" autocomplete="off">
-    <br>
-    <input type="submit" value="Submit">
-  </form>
-  `);
-});
-app.post(
-  '/zzlogin', 
-  passport.authenticate('local'), 
-  function(req, res, next) {
-    // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
-    res.send(`
-    <h1>Login Success</h1>
-    <pre>
-    username is : ${req.body['username']}<br>
-    password is : ${req.body['password']}<br>
-    </pre>
-    `);
-  }
-);
-
-//----------//
-// zzSignup //
-//----------//
-app.get('/zzsignup', function(req, res, next) {
-  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
-  res.send(`
-  <h1>zzSignUp</h1>
-  <form action="/zzsignup", method="post">
-    <label for="username">username: </label>
-    <input type="text" name="username" autocomplete="off">
-    <br>
-    <label for="password">password: </label>
-    <input type="text" name="password" autocomplete="off">
-    <br>
-    <input type="submit" value="Submit">
-  </form>
-  `);
-});
-app.post('/zzsignup', function zzsignup(req, res, next) {
-  var username  = req.body['username'];
-  var password  = bcrypt.hashSync(req.body['password'], bcrypt.genSaltSync(10));
-  pool.query(
-    'INSERT INTO users (username, password) VALUES ($1, $2)',
-    [username, password],
-    (err, data) => {
-      if(err) {
-        res.send(`<h1>zzSignup failure</h1>${JSON.stringify(err)}`);
-      } else {
-        res.send(`<h1>zzSignup success, check the database</h1>`);
-      }
-    }
-  );
-});
 
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
