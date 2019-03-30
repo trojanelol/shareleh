@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var app = express();
+var passport = require('passport')
+var LocalStrategy = require('passport-local').Strategy;
 
 require('dotenv').load();
 require('dotenv').config();
@@ -15,6 +17,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+
+// initialize passport
+app.use(passport.initialize());
 
 // Postgres
 const { Pool } = require('pg');
@@ -79,6 +84,8 @@ app.post('/secret/query', (req, res) => {
 
 // Route get requests to /secret
 app.use('/secret', require('./routes/secret'));
+
+app.post('/zzzlogin', );
 
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
