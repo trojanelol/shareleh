@@ -6,6 +6,7 @@ var logger = require('morgan');
 var app = express();
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt')
 
 require('dotenv').load();
 require('dotenv').config();
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 // initialize passport
 app.use(passport.initialize());
+app.use(passport.session())
 
 // Postgres
 const { Pool } = require('pg');
@@ -85,7 +87,65 @@ app.post('/secret/query', (req, res) => {
 // Route get requests to /secret
 app.use('/secret', require('./routes/secret'));
 
-app.post('/zzzlogin', );
+//---------//
+// zzLogin //
+//---------//
+app.get('/zzlogin', function(req, res, next) {
+  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+  res.send(`
+  <h1>zzLogin</h1>
+  <form action="/zzlogin", method="post">
+    <label for="username">username: </label>
+    <input type="text" name="username" autocomplete="off">
+    <br>
+    <label for="password">password: </label>
+    <input type="text" name="password" autocomplete="off">
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+  `);
+});
+app.post('/zzlogin', function(req, res, next) {
+  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+  res.send(`
+  username is: ${req.body['username']}<br>
+  password is: ${req.body['password']}<br>
+  `);
+});
+
+//----------//
+// zzSignup //
+//----------//
+app.get('/zzsignup', function(req, res, next) {
+  // res.json(JSON.decycle(req)) // For debugging, uncomment this to inspect req
+  res.send(`
+  <h1>zzSignUp</h1>
+  <form action="/zzsignup", method="post">
+    <label for="username">username: </label>
+    <input type="text" name="username" autocomplete="off">
+    <br>
+    <label for="password">password: </label>
+    <input type="text" name="password" autocomplete="off">
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+  `);
+});
+app.post('/zzsignup', function zzsignup(req, res, next) {
+  var username  = req.body['username'];
+  var password  = bcrypt.hashSync(req.body['password'], bcrypt.genSaltSync(10));
+  pool.query(
+    'INSERT INTO users (username, password) VALUES ($1, $2)',
+    [username, password],
+    (err, data) => {
+      if(err) {
+        res.send(`<h1>zzSignup failure</h1>${JSON.stringify(err)}`);
+      } else {
+        res.send(`<h1>zzSignup success, check the database</h1>`);
+      }
+    }
+  );
+});
 
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');

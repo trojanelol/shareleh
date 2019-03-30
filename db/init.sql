@@ -19,7 +19,7 @@ CREATE TABLE users (
 	name          VARCHAR(60),
 	username      VARCHAR(60)	   UNIQUE NOT NULL,
 	password      VARCHAR(60)	   NOT NULL,
-	email         VARCHAR (355)    UNIQUE NOT NULL,
+	email         VARCHAR (355)    UNIQUE,
  	created_on    TIMESTAMP        NOT NULL DEFAULT current_timestamp,
 	last_login    TIMESTAMP
 );
