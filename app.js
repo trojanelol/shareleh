@@ -21,14 +21,7 @@ require('dotenv').config();
 //==========//
 // Postgres //
 //==========//
-const { Pool } = require('pg');
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT
-});
+const db = require('./db')
 
 //------------//
 // Passportjs //
@@ -41,7 +34,7 @@ app.use(passport.session())
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 passport.use(new LocalStrategy((username, password, done) => {
-  pool.query(
+  db.query(
     'SELECT * FROM users WHERE username=$1',
     [username],
     (err, data) => {
@@ -86,7 +79,7 @@ app.get('/zzsignup', function(req, res, next) {
 app.post('/zzsignup', function zzsignup(req, res, next) {
   var username  = req.body['username'];
   var password  = bcrypt.hashSync(req.body['password'], bcrypt.genSaltSync(10));
-  pool.query(
+  db.query(
     'INSERT INTO users (username, password) VALUES ($1, $2)',
     [username, password],
     (err, data) => {
@@ -154,7 +147,7 @@ app.get('/signout', function(req, res){
 
 // GET testdb : Test database connection
 app.get('/testdb', (req, res) => {
-  pool.query('SELECT NOW()', (qerr, qres) => {
+  db.query('SELECT NOW()', (qerr, qres) => {
     if (qerr) {
       res.json(qerr.stack);
     } else {
@@ -179,7 +172,7 @@ a json object of the following schema e.g
 }
 */
 function poolquery(input, output) {
-  pool.query(input, (qerr, qres) => {
+  db.query(input, (qerr, qres) => {
     if (qerr) {
       output.json(qerr.stack);
     } else {
@@ -245,6 +238,8 @@ app.use('/product2', product2Router);
 app.use('/single', singleRouter);
 app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
+app.use('/api/items', itemsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
