@@ -58,9 +58,12 @@ CREATE TABLE lender_review (
 
 CREATE TABLE items (
 	iid            SERIAL,
-	item_date      VARCHAR(60),
+	name           TEXT    NOT NULL,
 	price          INTEGER,
-	description    VARCHAR(60),
+	description    TEXT,
+	location       TEXT,
+	start_time     TIMESTAMP,
+	end_time       TIMESTAMP,
 	PRIMARY KEY (iid)
 );
 
