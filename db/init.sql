@@ -26,17 +26,6 @@ CREATE TABLE admins (
 	uid 		INTEGER		PRIMARY KEY REFERENCES users(uid)
 );
 
-CREATE TABLE items (
-	iid					INTEGER PRIMARY KEY,
-	lender_id 			INTEGER	NOT NULL REFERENCES users(uid),
-	current_round		INTEGER UNIQUE REFERENCES rounds(rid),
-	name 				VARCHAR(60),
-	lender_price 		INTEGER NOT NULL DEFAULT 0,
-	lender_comments 	TEXT,
-	start_date			DATE,
-	end_date			DATE
-);
-
 CREATE TABLE rounds (
 	rid 				INTEGER PRIMARY KEY,
 	item_id 			INTEGER REFERENCES items(iid),
@@ -45,6 +34,17 @@ CREATE TABLE rounds (
 	lender_price		INTEGER NOT NULL DEFAULT 0,
 	lender_comments 	TEXT,
 	location			VARCHAR(60),
+	start_date			DATE,
+	end_date			DATE
+);
+
+CREATE TABLE items (
+	iid					INTEGER PRIMARY KEY,
+	lender_id 			INTEGER REFERENCES users(uid),
+	current_round		INTEGER UNIQUE REFERENCES rounds(rid),
+	name 				VARCHAR(60),
+	lender_price 		INTEGER NOT NULL DEFAULT 0,
+	lender_comments 	TEXT,
 	start_date			DATE,
 	end_date			DATE
 );
