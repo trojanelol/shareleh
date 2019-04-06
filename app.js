@@ -212,7 +212,7 @@ var product2Router = require('./routes/product2');
 var singleRouter = require('./routes/single');
 var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
-var itemsRouter = require('./routes/items');
+var itemsRouter = require('./routes/api/items');
 var dashboardRouter = require('./routes/dashboard');
 var uploadRouter = require('./routes/upload');
 

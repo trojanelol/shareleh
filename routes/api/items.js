@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const db = require('../db')
+const db = require('../../db')
 
 /* GET items. */
 router.get('/', function(req, res, next) {
