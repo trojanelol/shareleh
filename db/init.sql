@@ -92,13 +92,15 @@ CREATE TABLE lender_review (
 );
 
 CREATE TABLE wishlist (
-	items_id		INTEGER PRIMARY KEY REFERENCES items(iid),
-	uid 			INTEGER PRIMARY KEY REFERENCES users(uid)
+	items_id		INTEGER REFERENCES items(iid),
+	uid 			INTEGER REFERENCES users(uid),
+	PRIMARY KEY(items_id, uid)
 );
 
 CREATE TABLE item_categories (
-	item_id		INTEGER PRIMARY KEY REFERENCES items(iid),
-	uid			INTEGER PRIMARY KEY REFERENCES users(uid)
+	item_id		INTEGER REFERENCES items(iid),
+	uid			INTEGER REFERENCES users(uid),
+	PRIMARY KEY(item_id, uid)
 );
 
 CREATE TABLE tasks (
@@ -107,6 +109,7 @@ CREATE TABLE tasks (
 );
 
 CREATE TABLE users_tasks (
-	tid 			INTEGER PRIMARY KEY REFERENCES tasks(tid),
-	uid 			INTEGER PRIMARY KEY REFERENCES users(uid)
+	tid 			INTEGER REFERENCES tasks(tid),
+	uid 			INTEGER REFERENCES users(uid),
+	PRIMARY KEY(tid, uid)
 );
