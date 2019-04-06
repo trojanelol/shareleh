@@ -15,14 +15,52 @@ DROP TABLE IF EXISTS tasks CASCADE;
 DROP TABLE IF EXISTS user_tasks CASCADE;
 
 CREATE TABLE users (
-	uid           SERIAL           PRIMARY KEY,
-	name          VARCHAR(60),
-	username      VARCHAR(60)	   UNIQUE NOT NULL,
-	password      VARCHAR(60)	   NOT NULL,
-	email         VARCHAR (355)    UNIQUE,
- 	created_on    TIMESTAMP        NOT NULL DEFAULT current_timestamp,
-	last_login    TIMESTAMP
+	uid			INTEGER,
+	username	VARCHAR(60)		UNIQUE,
+	password	VARCHAR(60),
+	email		VARCHAR(60)		UNIQUE,
+	name		VARCHAR(60),
+	PRIMARY KEY(uid)	
 );
+
+CREATE TABLE admins (
+	uid 		INTEGER		PRIMARY KEY REFERENCES users(uid)
+);
+
+CREATE TABLE items (
+	iid					INTEGER,
+	lender_id 			INTEGER	NOT NULL REFERENCES users(uid),
+	current_round		INTEGER UNIQUE REFERENCES rounds(rid),
+	name 				VARCHAR(60),
+	lender_price 		INTEGER NOT NULL DEFAULT 0,
+	lender_comments 	TEXT,
+	start_date			DATE,
+	end_date			DATE DEFAULT 9999
+);
+
+CREATE TABLE rounds (
+	rid 				INTEGER PRIMARY KEY,
+	item_id 			INTEGER REFERENCES items(iid),
+	winning_bid_id		INTEGER UNIQUE REFERENCES rounds(rid),
+	name 				VARCHAR(60),
+	lender_price		INTEGER NOT NULL DEFAULT 0,
+	lender_comments 	TEXT,
+	location			VARCHAR(60),
+	start_date			DATE,
+	end_date			DATE DEFAULT 9999
+);
+
+
+
+
+
+
+
+
+
+
+
+
 
 CREATE TABLE admins (
 	aid           SERIAL,
