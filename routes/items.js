@@ -25,12 +25,17 @@ router.get('/', function(req, res, next) {
     validParams.set('start_date', ' <= ');
     validParams.set('end_date', ' >= ');
 
+    //Date regex - ignore if doesnt fit pattern
+    var dateRegex = new RegExp("^((0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\/[12]\\d{3})$");
+
     //TODO rating
 
     var filtered = params.filter(function(value, index, arr){
 
         if (value[1] === "") {
             return false;
+        } else if (value[0] === 'start_date' || value[0] === 'end_date') {
+            return dateRegex.test(value[1]);
         } else if (validParams.has(value[0])) {
             return true;
         }
