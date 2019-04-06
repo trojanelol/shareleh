@@ -50,7 +50,15 @@ CREATE TABLE rounds (
 	end_date			DATE DEFAULT 9999
 );
 
-
+CREATE TABLE bids (
+	bid 				INTEGER PRIMARY KEY
+	round				INTEGER REFERENCES rounds(rid),
+	borrower 			INTEGER REFERENCES users(uid),
+	borrower_price		INTEGER,
+	return_date			DATE,
+	borrower_comments	TEXT,
+	bid_date			TIMESTAMP
+);
 
 
 
