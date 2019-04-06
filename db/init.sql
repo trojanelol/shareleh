@@ -83,6 +83,24 @@ CREATE TABLE borrower_review (
 	review_date 	TIMESTAMP
 );
 
+CREATE TABLE lender_review (
+	lender_rid 		INTEGER PRIMARY KEY,
+	lid 			INTEGER REFERENCES users(uid),
+	reviewer_id 	INTEGER REFERENCES users(uid),
+	rating			INTEGER,
+	comments 		TEXT,
+	review_date 	TIMESTAMP
+);
+
+CREATE TABLE wishlist (
+	items_id 		INTEGER PRIMARY KEY REFERENCES items(iid),
+	uid 			INTEGER PRIMARY KEY REFERENCES users(uid)
+);
+
+CREATE TABLE item_categories (
+	item_id 		INTEGER PRIMARY KEY REFERENCES items(iid),
+	uid 			INTEGER PRIMARY KEY REFERENCES users(uid)
+);
 
 
 
