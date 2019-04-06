@@ -59,11 +59,11 @@ CREATE TABLE lender_review (
 CREATE TABLE items (
 	iid            SERIAL,
 	name           TEXT    NOT NULL,
-	price          INTEGER,
+	price          INTEGER NOT NULL DEFAULT 0,
 	description    TEXT,
 	location       TEXT,
-	start_time     TIMESTAMP,
-	end_time       TIMESTAMP,
+	start_date     DATE,
+	end_date       DATE,
 	PRIMARY KEY (iid)
 );
 
@@ -118,7 +118,3 @@ CREATE TABLE user_tasks (
 	user_id    INTEGER    NOT NULL REFERENCES users(uid),
 	PRIMARY KEY (task_id, user_id)
 );
-
-
-
-

@@ -22,8 +22,10 @@ router.get('/', function(req, res, next) {
     validParams.set('price_ceiling', ' <= ');
     validParams.set('location', ' = ');
     validParams.set('category', ' = ');
+    validParams.set('start_date', ' <= ');
+    validParams.set('end_date', ' >= ');
 
-    //TODO start date, end date
+    //TODO rating
 
     var filtered = params.filter(function(value, index, arr){
 
@@ -45,6 +47,11 @@ router.get('/', function(req, res, next) {
             cond.push('price' + validParams.get(filtered[i][0]) + '$' + (i+1));
             values.push(filtered[i][1]);
             continue;
+
+        } else if (filtered[i][0] === 'start_date' || filtered[i][0] === 'end_date') {
+            cond.push(filtered[i][0] + validParams.get(filtered[i][0]) + 'to_date($' + (i+1) + `, 'MM/DD/YYYY')`);
+            values.push(filtered[i][1]);
+            continue;
         }
 
         cond.push(filtered[i][0] + validParams.get(filtered[i][0]) + '$' + (i+1));
@@ -55,7 +62,8 @@ router.get('/', function(req, res, next) {
         var queryWhereText = 'WHERE ' + cond.join(' AND ');
     }
 
-    console.log(queryWhereText);
+    // console.log(queryWhereText);
+    // console.log(values);
 
     //Offset and limit
     var limitOffsetText = "";

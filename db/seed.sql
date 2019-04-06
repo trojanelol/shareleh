@@ -18,14 +18,14 @@ INSERT INTO users (name, username, password, email) VALUES
 INSERT INTO admins (name, username, password, email) VALUES
 ('adminname', 'admin', 'password2', 'admin@shareleh.com');
 
-INSERT INTO items (name, description, location) VALUES
-('Potato', 'Can be eaten. Trust me.', 'east');
+INSERT INTO items (name, description, location, price, start_date) VALUES
+('Potato', 'Can be eaten. Trust me.', 'east', 5, '2019-05-07'::date);
 
-INSERT INTO items (name, description, location) VALUES
-('Cactus', 'Fake.', 'north');
+INSERT INTO items (name, description, location, start_date) VALUES
+('Cactus', 'Fake.', 'north', '2019-06-07'::date);
 
-INSERT INTO items (name, description, location) VALUES
-('Pie', '3.1415926535', 'west');
+INSERT INTO items (name, description, location, start_date) VALUES
+('Pie', '3.1415926535', 'west', '2019-07-07'::date);
 
 INSERT INTO items (name, description, location) VALUES
 ('Mini Portable BBQ Grill Rack', 'Portable Grill, Handle at the side for easy usage, Vent holes at the side of racks', 'central');
