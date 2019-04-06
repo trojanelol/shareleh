@@ -28,7 +28,7 @@ CREATE TABLE admins (
 );
 
 CREATE TABLE items (
-	iid					INTEGER,
+	iid					INTEGER PRIMARY KEY,
 	lender_id 			INTEGER	NOT NULL REFERENCES users(uid),
 	current_round		INTEGER UNIQUE REFERENCES rounds(rid),
 	name 				VARCHAR(60),
@@ -65,6 +65,23 @@ CREATE TABLE user_following (
 	following_id		INTEGER PRIMARY KEY REFERENCES users(uid),
 );
 
+CREATE TABLE item_review (
+	item_rid 		INTEGER PRIMARY KEY,
+	items_id 		INTEGER REFERENCES items(iid),
+	reviewer_id 	INTEGER REFERENCES users(uid),
+	rating			INTEGER,
+	comments 		TEXT,
+	review_date 	TIMESTAMP
+);
+
+CREATE TABLE borrower_review (
+	borrower_rid 	INTEGER PRIMARY KEY,
+	bid 			INTEGER REFERENCES users(uid),
+	reviewer_id 	INTEGER REFERENCES users(uid),
+	rating			INTEGER,
+	comments 		TEXT,
+	review_date 	TIMESTAMP
+);
 
 
 
