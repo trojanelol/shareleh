@@ -213,6 +213,8 @@ var singleRouter = require('./routes/single');
 var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
 var itemsRouter = require('./routes/items');
+var dashboardRouter = require('./routes/dashboard');
+var uploadRouter = require('./routes/upload');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -238,6 +240,8 @@ app.use('/product2', product2Router);
 app.use('/single', singleRouter);
 app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
+app.use('/dashboard', dashboardRouter);
+app.use('/upload', uploadRouter);
 app.use('/api/items', itemsRouter);
 
 
