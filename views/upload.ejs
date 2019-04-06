@@ -2,7 +2,7 @@
 <html lang="zxx">
 
 <head>
-	<title>Grocery Shoppy an Ecommerce Category Bootstrap Responsive Web Template | About Us :: w3layouts</title>
+	<title>Grocery Shoppy an Ecommerce Category Bootstrap Responsive Web Template | Upload Item :: w3layouts</title>
 	<!--/tags -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -47,9 +47,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		</div>
 	</div>
 	<!-- //page -->
-	<!-- about page -->
-	<!-- welcome -->
-	<div class="welcome">
+	<!-- contact page -->
+	<div class="contact-w3l">
 		<div class="container">
 			<!-- tittle heading -->
 			<h3 class="tittle-w3l">Upload Item
@@ -60,32 +59,64 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</span>
 			</h3>
 			<!-- //tittle heading -->
-			<div class="w3l-welcome-info">
-				<div class="col-sm-6 col-xs-6 welcome-grids">
-					<div class="welcome-img">
-						<img src="images/about.jpg" class="img-responsive zoom-img" alt="">
+			<!-- contact -->
+			<div class="contact agileits">
+				<div class="contact-agileinfo">
+					<div class="contact-form wthree">
+						<form action="#" method="post">
+							<div class="">
+								<input type="text" name="title" placeholder="Title" required="">
+							</div>
+							<div class="">
+								<input list= "category" type="text" name="category" placeholder="Category" required="" selectBoxOptions="Books:Clothings">
+								<datalist id="category">
+    							<option value="Books">
+    							<option value="Clothings">
+    							<option value="Electronics">
+    							<option value="Food & Beverages">
+    							<option value="Furniture">
+									<option value="Kitchenware">
+	    						<option value="Party Sets">
+	    						<option value="Tools">
+									<option value="Video Games">
+									<option value="Vehicles">
+		    					<option value="Vouchers">
+		    					<option value="Others">
+  							</datalist>
+							</div>
+							<div class="">
+								<input type="number" name="minimumbid" placeholder="Minimum Bidding Amount" required="">
+							</div>
+							<div class="">
+								<textarea placeholder="Description" name="description" required=""></textarea>
+							</div>
+							<div class="">
+								<input list="location" type="text" name="location" placeholder="Location" required="">
+								<datalist id="location">
+									<option value="Anywhere">
+									<option value="Central Singapore">
+									<option value="North Singapore">
+									<option value="South Singapore">
+									<option value="East Singapore">
+									<option value="West Singapore">
+								</datalist>
+							</div>
+							<div class="">
+								<input list="bidder" type="text" name="bidder" placeholder="Bidder Preference" required="">
+								<datalist id="bidder">
+									<option value="Manual check">
+									<option value="First come first served">
+									<option value="Most reliable bidder">
+									<option value="Highest bid">
+								</datalist>
+							</div>
+							<div class="">
+								<input type="file" name="pic" accept="image/*">
+							</div>
+							<input type="submit" value="Submit">
+						</form>
 					</div>
 				</div>
-				<div class="col-sm-6 col-xs-6 welcome-grids">
-					<div class="welcome-img">
-						<img src="images/about2.jpg" class="img-responsive zoom-img" alt="">
-					</div>
-				</div>
-				<div class="clearfix"> </div>
-			</div>
-			<div class="w3l-welcome-text">
-				<p>Nam libero tempore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus
-					omnis optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.Sed ut perspiciatis unde omnis iste
-					natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
-					et quasi architecto beatae vitae </p>
-				<p>libero tempore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus
-					omnis optio cumque nihil impedit </p>
-			</div>
-		</div>
-	</div>
-	<!-- //welcome -->
-	<!-- //about page -->
-
 	<!-- js-files -->
 	<!-- jquery -->
 	<script src="js/jquery-2.1.4.min.js"></script>
