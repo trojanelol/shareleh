@@ -30,13 +30,26 @@ var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt')
 app.use(passport.initialize());
-app.use(passport.session())
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+app.use(passport.session());
+passport.serializeUser((user, done) => done(null, user["username"]));
+passport.deserializeUser((username, done) => {
+  db.query("SELECT uid,username FROM users WHERE username = $1", [username],
+    (err, data) => {
+      if (err || data.rows.length != 1)
+        return done(err);
+      else {
+        return done(null, {
+          // access these deserialized details at req.user (a json object)
+          uid : data.rows[0]['uid'],
+          username : data.rows[0]['username'],
+          name : data.rows[0]['name'],
+        });
+      }
+    }
+  );
+});
 passport.use(new LocalStrategy((username, password, done) => {
-  db.query(
-    'SELECT * FROM users WHERE username=$1',
-    [username],
+  db.query( 'SELECT * FROM users WHERE username=$1', [username],
     (err, data) => {
       if (err || data.rows.length != 1)
         return done(err);
@@ -55,6 +68,10 @@ passport.use(new LocalStrategy((username, password, done) => {
 }));
 app.use(function (req, res, next) {
   res.locals.signedin = req.isAuthenticated();
+  next();
+});
+app.use(function (req, res, next) {
+  res.locals.user = req.user;
   next();
 });
 
@@ -212,7 +229,9 @@ var product2Router = require('./routes/product2');
 var singleRouter = require('./routes/single');
 var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
-var itemsRouter = require('./routes/items');
+var itemsApiRouter = require('./routes/api/items');
+var dashboardRouter = require('./routes/dashboard');
+var uploadRouter = require('./routes/upload');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -238,7 +257,9 @@ app.use('/product2', product2Router);
 app.use('/single', singleRouter);
 app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
-app.use('/api/items', itemsRouter);
+app.use('/dashboard', dashboardRouter);
+app.use('/upload', uploadRouter);
+app.use('/api/items', itemsApiRouter);
 
 
 // catch 404 and forward to error handler

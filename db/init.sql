@@ -49,30 +49,6 @@ CREATE TABLE rounds (
 	end_date			DATE DEFAULT 9999
 );
 
-CREATE TABLE bids (
-	bid 				INTEGER PRIMARY KEY
-	round				INTEGER REFERENCES rounds(rid),
-	borrower 			INTEGER REFERENCES users(uid),
-	borrower_price		INTEGER,
-	return_date			DATE,
-	borrower_comments	TEXT,
-	bid_date			TIMESTAMP
-);
-
-CREATE TABLE user_following (
-	follower_id 		INTEGER PRIMARY KEY REFERENCES users(uid),
-	following_id		INTEGER PRIMARY KEY REFERENCES users(uid),
-);
-
-CREATE TABLE item_review (
-	item_rid 		INTEGER PRIMARY KEY,
-	items_id 		INTEGER REFERENCES items(iid),
-	reviewer_id 	INTEGER REFERENCES users(uid),
-	rating			INTEGER,
-	comments 		TEXT,
-	review_date 	TIMESTAMP
-);
-
 CREATE TABLE borrower_review (
 	borrower_rid 	INTEGER PRIMARY KEY,
 	bid 			INTEGER REFERENCES users(uid),
@@ -109,4 +85,28 @@ CREATE TABLE tasks (
 CREATE TABLE users_tasks (
 	tid 			INTEGER PRIMARY KEY REFERENCES tasks(tid),
 	uid 			INTEGER PRIMARY KEY REFERENCES users(uid)
+);
+
+CREATE TABLE bids (
+	bid 				INTEGER PRIMARY KEY
+	round				INTEGER REFERENCES rounds(rid),
+	borrower 			INTEGER REFERENCES users(uid),
+	borrower_price		INTEGER,
+	return_date			DATE,
+	borrower_comments	TEXT,
+	bid_date			TIMESTAMP
+);
+
+CREATE TABLE user_following (
+	follower_id 		INTEGER PRIMARY KEY REFERENCES users(uid),
+	following_id		INTEGER PRIMARY KEY REFERENCES users(uid),
+);
+
+CREATE TABLE item_review (
+	item_rid 		INTEGER PRIMARY KEY,
+	items_id 		INTEGER REFERENCES items(iid),
+	reviewer_id 	INTEGER REFERENCES users(uid),
+	rating			INTEGER,
+	comments 		TEXT,
+	review_date 	TIMESTAMP
 );
