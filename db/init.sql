@@ -76,14 +76,9 @@ CREATE TABLE item_review (
 	review_date    TIMESTAMP
 );
 
-CREATE TABLE categories (
-	cid     SERIAL    PRIMARY KEY,
-	name    VARCHAR(60)
-);
-
 CREATE TABLE item_categories (
-	items_id         INTEGER	NOT NULL REFERENCES items(iid),
-	categories_id    INTEGER	NOT NULL REFERENCES categories(cid)
+	item_id         INTEGER	NOT NULL REFERENCES items(iid),
+	cname    text	NOT NULL
 );
 
 CREATE TABLE offers (
