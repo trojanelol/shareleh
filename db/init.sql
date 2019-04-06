@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS tasks CASCADE;
 DROP TABLE IF EXISTS users_tasks CASCADE;
 
 CREATE TABLE users (
-	uid			SERIAL PRIMARY KEY,
+	uid			INTEGER,
 	username	VARCHAR(60)		UNIQUE,
 	password	VARCHAR(60),
 	email		VARCHAR(60)		UNIQUE,
@@ -23,7 +23,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admins (
-	uid 	INTEGER	PRIMARY KEY REFERENCES users(uid)
+	uid 		INTEGER		PRIMARY KEY REFERENCES users(uid)
 );
 
 CREATE TABLE items (
@@ -34,7 +34,7 @@ CREATE TABLE items (
 	lender_price 		INTEGER NOT NULL DEFAULT 0,
 	lender_comments 	TEXT,
 	start_date			DATE,
-	end_date			DATE DEFAULT 9999
+	end_date			DATE
 );
 
 CREATE TABLE rounds (
@@ -46,7 +46,31 @@ CREATE TABLE rounds (
 	lender_comments 	TEXT,
 	location			VARCHAR(60),
 	start_date			DATE,
-	end_date			DATE DEFAULT 9999
+	end_date			DATE
+);
+
+CREATE TABLE bids (
+	bid 				INTEGER PRIMARY KEY
+	round				INTEGER REFERENCES rounds(rid),
+	borrower 			INTEGER REFERENCES users(uid),
+	borrower_price		INTEGER,
+	return_date			DATE,
+	borrower_comments	TEXT,
+	bid_date			TIMESTAMP
+);
+
+CREATE TABLE user_following (
+	follower_id 		INTEGER PRIMARY KEY REFERENCES users(uid),
+	following_id		INTEGER PRIMARY KEY REFERENCES users(uid),
+);
+
+CREATE TABLE item_review (
+	item_rid 		INTEGER PRIMARY KEY,
+	items_id 		INTEGER REFERENCES items(iid),
+	reviewer_id 	INTEGER REFERENCES users(uid),
+	rating			INTEGER,
+	comments 		TEXT,
+	review_date 	TIMESTAMP
 );
 
 CREATE TABLE borrower_review (
@@ -79,34 +103,10 @@ CREATE TABLE item_categories (
 
 CREATE TABLE tasks (
 	tid 			INTEGER PRIMARY KEY,
-	description 	TEXTS
+	description 	TEXT
 );
 
 CREATE TABLE users_tasks (
 	tid 			INTEGER PRIMARY KEY REFERENCES tasks(tid),
 	uid 			INTEGER PRIMARY KEY REFERENCES users(uid)
-);
-
-CREATE TABLE bids (
-	bid 				INTEGER PRIMARY KEY
-	round				INTEGER REFERENCES rounds(rid),
-	borrower 			INTEGER REFERENCES users(uid),
-	borrower_price		INTEGER,
-	return_date			DATE,
-	borrower_comments	TEXT,
-	bid_date			TIMESTAMP
-);
-
-CREATE TABLE user_following (
-	follower_id 		INTEGER PRIMARY KEY REFERENCES users(uid),
-	following_id		INTEGER PRIMARY KEY REFERENCES users(uid),
-);
-
-CREATE TABLE item_review (
-	item_rid 		INTEGER PRIMARY KEY,
-	items_id 		INTEGER REFERENCES items(iid),
-	reviewer_id 	INTEGER REFERENCES users(uid),
-	rating			INTEGER,
-	comments 		TEXT,
-	review_date 	TIMESTAMP
 );
