@@ -23,7 +23,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admins (
-	uid INTEGER	PRIMARY KEY REFERENCES users(uid)
+	uid 	INTEGER	PRIMARY KEY REFERENCES users(uid)
 );
 
 CREATE TABLE items (
