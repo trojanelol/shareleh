@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS tasks CASCADE;
 DROP TABLE IF EXISTS users_tasks CASCADE;
 
 CREATE TABLE users (
-	uid			INTEGER,
+	uid			SERIAL PRIMARY KEY,
 	username	VARCHAR(60)		UNIQUE,
 	password	VARCHAR(60),
 	email		VARCHAR(60)		UNIQUE,
@@ -23,7 +23,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admins (
-	uid 		INTEGER		PRIMARY KEY REFERENCES users(uid)
+	uid 	INTEGER	PRIMARY KEY REFERENCES users(uid)
 );
 
 CREATE TABLE items (
