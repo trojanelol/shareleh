@@ -60,6 +60,10 @@ CREATE TABLE bids (
 	bid_date			TIMESTAMP
 );
 
+CREATE TABLE user_following (
+	follower_id 		INTEGER PRIMARY KEY REFERENCES users(uid),
+	following_id		INTEGER PRIMARY KEY REFERENCES users(uid),
+);
 
 
 
