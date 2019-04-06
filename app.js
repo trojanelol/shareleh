@@ -212,7 +212,7 @@ var product2Router = require('./routes/product2');
 var singleRouter = require('./routes/single');
 var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
-var itemsRouter = require('./routes/api/items');
+var itemsApiRouter = require('./routes/api/items');
 var dashboardRouter = require('./routes/dashboard');
 var uploadRouter = require('./routes/upload');
 
@@ -242,7 +242,7 @@ app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/upload', uploadRouter);
-app.use('/api/items', itemsRouter);
+app.use('/api/items', itemsApiRouter);
 
 
 // catch 404 and forward to error handler
