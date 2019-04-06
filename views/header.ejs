@@ -45,10 +45,16 @@
         </li>
         <% } else { %>
         <li>
-          <span class="fa fa-truck" aria-hidden="true"></span><a href="/signout">Sign Out</a>
+          Welcome, <%= user.username %>
         </li>
         <li>
-          Welcome, user
+          <a href="upload">Upload</a>
+        </li>
+        <li>
+          <a href="dashboard">Dashboard</a>
+        </li>
+        <li>
+          <span class="fa fa-truck" aria-hidden="true"></span><a href="/signout">Sign Out</a>
         </li>
         <% } %>
       </ul>
@@ -65,15 +71,7 @@
       <!-- //search -->
       <!-- cart details -->
       <div class="top_nav_right">
-        <div class="wthreecartaits wthreecartaits2 cart cart box_1">
-          <form action="#" method="post" class="last">
-            <input type="hidden" name="cmd" value="_cart">
-            <input type="hidden" name="display" value="1">
-            <button class="w3view-cart" type="submit" name="submit" value="">
-              <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
-            </button>
-          </form>
-        </div>
+      <!-- what to do -->
       </div>
       <!-- //cart details -->
       <div class="clearfix"></div>
@@ -81,59 +79,6 @@
     <div class="clearfix"></div>
   </div>
 </div>
-<!-- shop locator (popup) -->
-<!-- Button trigger modal(shop-locator) -->
-<div id="small-dialog1" class="mfp-hide">
-  <div class="select-city">
-    <h3>Please Select Your Region</h3>
-    <select class="list_of_locations">
-      <optgroup label="Popular Cities">
-        <option selected style="display:none;color:#eee;">Select City</option>
-        <option>Dhoby Ghaut</option>
-        <option>Bedok</option>
-        <option>Ang Mo Kio</option>
-      </optgroup>
-      <!-- https://en.wikipedia.org/wiki/Central_Region,_Singapore -->
-      <optgroup label="Central Region">
-        <option>Bishan</option>
-        <option>Bukit Merah</option>
-        <option>Bukit Timah</option>
-        <option>Queenstown</option>
-        <option>Ghim Moh</option>
-      </optgroup>
-      <optgroup label="East Region">
-        <option>Bedok</option>
-        <option>Changi</option>
-        <option>Pasir Ris</option>
-        <option>Paya Lebar</option>
-        <option>Tampines</option>
-      </optgroup>
-      <optgroup label="North Region">
-        <option>Lim Chu Kang</option>
-        <option>Mandai</option>
-        <option>Sembawang</option>
-        <option>Woodlands</option>
-        <option>Yishun</option>
-      </optgroup>
-      <optgroup label="North-East Region">
-        <option>Ang Mo Kio</option>
-        <option>Hougang</option>
-        <option>Punggol</option>
-        <option>Sengkang</option>
-        <option>Serangoon</option>
-      </optgroup>
-      <optgroup label="West">
-        <option>Boon Lay</option>
-        <option>Bukit Batok</option>
-        <option>Bukit Panjang</option>
-        <option>Choa Chu Kang</option>
-        <option>Clementi</option>
-      </optgroup>
-    </select>
-    <div class="clearfix"></div>
-  </div>
-</div>
-<!-- //shop locator (popup) -->
 <!-- signin Model -->
 <!-- Modal1 -->
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
@@ -201,9 +146,9 @@
             <div class="styled-input">
               <input type="password" placeholder="Password" name="password" id="password1" autocomplete="off" required>
             </div>
-            <!-- <div class="styled&#45;input"> -->
-            <!--   <input type="password" placeholder="Confirm Password" name="Confirm Password" id="password2" required=""> -->
-            <!-- </div> -->
+            <div class="styled&#45;input">
+              <input type="password" placeholder="Confirm Password" name="Confirm Password" id="password2" required="">
+            </div>
             <input type="submit" value="Sign Up">
           </form>
           <p>
@@ -221,25 +166,6 @@
 <!-- navigation -->
 <div class="ban-top">
   <div class="container">
-    <div class="agileits-navi_search">
-      <form action="#" method="post">
-        <select id="agileinfo-nav_search" name="agileinfo_search" required="">
-          <option value="">All Categories</option>
-          <option value="Books">Books</option>
-          <option value="Clothings">Clothings</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Food &amp; Beverages">Food & Beverages</option>
-          <option value="Furniture">Furniture</option>
-          <option value="Kitchenware">Kitchenware</option>
-          <option value="Party Sets">Party Sets</option>
-          <option value="Tools">Tools</option>
-          <option value="Video Games">Video Games</option>
-          <option value="Vehicles">Vehicles</option>
-          <option value="Vouchers">Vouchers</option>
-          <option value="Others">Others</option>
-        </select>
-      </form>
-    </div>
     <div class="top_nav_left">
       <nav class="navbar navbar-default">
         <div class="container-fluid">

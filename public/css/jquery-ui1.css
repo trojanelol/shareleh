@@ -65,9 +65,6 @@
   font-weight: normal/*{fwDefault}*/;
   color: #555555/*{fcDefault}*/;
   outline: none;
-  width: 15px;
-  height: 15px; 
   cursor: pointer;
-  border-radius: 100%;
 	}
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555/*{fcDefault}*/; text-decoration: none; }
