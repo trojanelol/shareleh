@@ -229,9 +229,12 @@ var product2Router = require('./routes/product2');
 var singleRouter = require('./routes/single');
 var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
-var itemsApiRouter = require('./routes/api/items');
 var dashboardRouter = require('./routes/dashboard');
 var uploadRouter = require('./routes/upload');
+
+//APIs
+var browseApiRouter = require('./routes/api/browse');
+var itemsApiRouter = require('./routes/api/items');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -259,6 +262,9 @@ app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/upload', uploadRouter);
+
+//APIs
+app.use('/api/browse', browseApiRouter);
 app.use('/api/items', itemsApiRouter);
 
 

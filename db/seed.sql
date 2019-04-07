@@ -14,13 +14,13 @@ DELETE FROM admins;
 DELETE FROM users;
 
 
-INSERT INTO users (username, password, name) VALUES
+INSERT INTO users (username, password, first_name) VALUES
 ('normaluser', 'password', 'normal');
 
-INSERT INTO users (username, password, name) VALUES
+INSERT INTO users (username, password, first_name) VALUES
 ('admin', 'password', 'adminname');
 
-INSERT INTO users (username, password, name) VALUES
+INSERT INTO users (username, password, first_name) VALUES
 ('normaluser2', 'password', 'normal2');
 
 INSERT INTO admins (uid) VALUES
@@ -56,3 +56,6 @@ VALUES (3, 2, 2.6, 'Looked too real for a decoration.',  '2019-07-07'::date);
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
 VALUES (1, 2, 3.6, 'No 4k support',  '2019-08-07'::date);
+
+INSERT INTO lender_review (lid, reviewer_id, rating, comments, review_date)
+VALUES (1, 2, 4.7, 'Super friendly lender',  '2019-08-07'::date);

@@ -21,7 +21,7 @@ CREATE TABLE users (
 	uid			SERIAL,
 	username	VARCHAR(60)		UNIQUE,
 	password	text,
-	name		VARCHAR(60),
+	first_name	VARCHAR(60),
 	PRIMARY KEY(uid)	
 );
 
