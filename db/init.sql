@@ -18,21 +18,20 @@ DROP EXTENSION IF EXISTS citext;
 CREATE EXTENSION citext;
 
 CREATE TABLE users (
-	uid			INTEGER,
+	uid			SERIAL,
 	username	VARCHAR(60)		UNIQUE,
-	password	VARCHAR(60),
-	email		VARCHAR(60)		UNIQUE,
+	password	text,
 	name		VARCHAR(60),
 	PRIMARY KEY(uid)	
 );
 
 CREATE TABLE tasks (
-	tid 			INTEGER PRIMARY KEY,
+	tid 			SERIAL PRIMARY KEY,
 	description 	TEXT
 );
 
 CREATE TABLE admins (
-	uid 		INTEGER		PRIMARY KEY REFERENCES users(uid)
+	uid 		SERIAL		PRIMARY KEY REFERENCES users(uid)
 );
 
 CREATE TABLE users_tasks (
@@ -42,23 +41,23 @@ CREATE TABLE users_tasks (
 );
 
 CREATE TABLE items (
-	iid 				INTEGER PRIMARY KEY,
-	lender_id			INTEGER REFERENCES users(uid),
+	iid 				SERIAL PRIMARY KEY,
+	lid					INTEGER REFERENCES users(uid),
 	name 				citext,
-	lender_price		INTEGER NOT NULL DEFAULT 0,
-	lender_comments 	TEXT,
-	location			VARCHAR,
+	price			INTEGER NOT NULL DEFAULT 0,
+	description	 		TEXT,
+	location			citext,
 	start_date 			DATE NOT NULL DEFAULT CURRENT_DATE,
 	end_date 			DATE NOT NULL DEFAULT '9999-01-01'	
 );
 
 CREATE TABLE rounds (
-	rid 				INTEGER PRIMARY KEY
+	rid 				SERIAL PRIMARY KEY
 );
 
 CREATE TABLE bids (
-	bid 				INTEGER PRIMARY KEY,
-	round				INTEGER REFERENCES rounds(rid),
+	bid 				SERIAL PRIMARY KEY,
+	rid					INTEGER REFERENCES rounds(rid),
 	borrower 			INTEGER REFERENCES users(uid),
 	borrower_price		INTEGER,
 	return_date			DATE,
@@ -75,43 +74,43 @@ CREATE TABLE user_following (
 );
 
 CREATE TABLE lender_review (
-	lender_rid 		INTEGER PRIMARY KEY,
+	lrid 			SERIAL PRIMARY KEY,
 	lid 			INTEGER REFERENCES users(uid),
 	reviewer_id 	INTEGER REFERENCES users(uid),
-	rating			INTEGER,
+	rating			REAL NOT NULL,
 	comments 		TEXT,
 	review_date 	TIMESTAMP
 );
 
 CREATE TABLE borrower_review (
-	borrower_rid 	INTEGER PRIMARY KEY,
+	brid		 	SERIAL PRIMARY KEY,
 	bid 			INTEGER REFERENCES users(uid),
 	reviewer_id 	INTEGER REFERENCES users(uid),
-	rating			INTEGER,
+	rating			REAL NOT NULL,
 	comments 		TEXT,
 	review_date 	TIMESTAMP
 );
 
 CREATE TABLE item_categories (
-	item_id			INTEGER,
-	category_name	citext,
-	PRIMARY KEY(item_id, uid),
-	FOREIGN KEY(item_id) REFERENCES items(iid)
+	iid				INTEGER,
+	cname			citext,
+	PRIMARY KEY(iid, cname),
+	FOREIGN KEY(iid) REFERENCES items(iid)
 );
 
 CREATE TABLE wishlist (
-	item_id			INTEGER,
-	uid 			INTEGER,
-	PRIMARY KEY(item_id, uid),
-	FOREIGN KEY(item_id) REFERENCES items(iid),
+	iid			INTEGER,
+	uid 		INTEGER,
+	PRIMARY KEY(iid, uid),
+	FOREIGN KEY(iid) REFERENCES items(iid),
 	FOREIGN KEY(uid) REFERENCES users(uid)
 );
 
 CREATE TABLE item_review (
-	item_rid 		INTEGER PRIMARY KEY,
-	items_id 		INTEGER REFERENCES items(iid),
+	irid	 		SERIAL PRIMARY KEY,
+	iid 			INTEGER REFERENCES items(iid),
 	reviewer_id 	INTEGER REFERENCES users(uid),
-	rating			INTEGER,
+	rating			REAL NOT NULL,
 	comments 		TEXT,
 	review_date 	TIMESTAMP
 );
