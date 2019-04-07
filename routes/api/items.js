@@ -25,11 +25,10 @@ router.get('/', function(req, res, next) {
     validParams.set('start_date', ' <= ');
     validParams.set('end_date', ' >= ');
     validParams.set('keywords', ' LIKE ');
+    validParams.set('rating', ' >= ');
 
     //Date regex - ignore if doesnt fit pattern
-    var dateRegex = new RegExp("^((0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\/[12]\\d{3})$");
-
-    //TODO rating
+    let dateRegex = new RegExp("^((0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\/[12]\\d{3})$");
 
     var filtered = params.filter(function(value, index, arr){
 
@@ -60,6 +59,10 @@ router.get('/', function(req, res, next) {
 
         } else if (filtered[i][0] === 'start_date' || filtered[i][0] === 'end_date') {
             cond.push(filtered[i][0] + validParams.get(filtered[i][0]) + 'to_date($' + (i+1) + `, 'MM/DD/YYYY')`);
+            values.push(filtered[i][1]);
+            continue;
+        } else if (filtered[i][0] === 'category') {
+            cond.push('cname' + validParams.get(filtered[i][0]) + '$' + (i+1));
             values.push(filtered[i][1]);
             continue;
         }
@@ -104,8 +107,10 @@ router.get('/', function(req, res, next) {
     }
 
     //Execute query
-    db.query(`with item_with_categories as (SELECT items.*, item_categories.cname AS category FROM items left join item_categories on items.iid = item_categories.item_id) ` +
-        `SELECT * FROM item_with_categories ` + queryWhereText + keywordsQueryText + limitOffsetText,
+    //left join with item_categories last to prevent duplicates
+    db.query(`WITH calc_avg AS (SELECT iid, ROUND(AVG(rating)::NUMERIC,2) AS rating FROM item_review GROUP BY iid), ` +
+        `items_with_ratings AS (SELECT * FROM items LEFT JOIN calc_avg USING (iid)) ` +
+        `SELECT DISTINCT items_with_ratings.* FROM items_with_ratings LEFT JOIN item_categories USING (iid) ` + queryWhereText + keywordsQueryText + limitOffsetText,
         values,
         (err, data) => {
             if (err !== undefined) {
