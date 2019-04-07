@@ -1474,7 +1474,7 @@ ul.w3_short {
     -moz-box-shadow:3px 3px 13px rgba(0, 0, 0, 0.5);
     box-shadow: 3px 3px 13px rgba(0, 0, 0, 0.5);
 }
-.contact input[type="text"], .contact input[type="email"], .contact textarea  {
+.contact input[type="text"], .contact input[type="number"], .contact textarea  {
     width: 100%;
     color: #000;
     background: none;
