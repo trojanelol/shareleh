@@ -24,6 +24,7 @@ router.get('/', function(req, res, next) {
     validParams.set('category', ' = ');
     validParams.set('start_date', ' <= ');
     validParams.set('end_date', ' >= ');
+    validParams.set('keywords', ' LIKE ');
 
     //Date regex - ignore if doesnt fit pattern
     var dateRegex = new RegExp("^((0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\/[12]\\d{3})$");
@@ -36,6 +37,10 @@ router.get('/', function(req, res, next) {
             return false;
         } else if (value[0] === 'start_date' || value[0] === 'end_date') {
             return dateRegex.test(value[1]);
+        } else if (value[0] === 'limit' || value[0] === 'offset') {
+            return false;
+        }  else if (value[0] === 'keywords') {
+            return false;
         } else if (validParams.has(value[0])) {
             return true;
         }
@@ -58,17 +63,31 @@ router.get('/', function(req, res, next) {
             values.push(filtered[i][1]);
             continue;
         }
-
         cond.push(filtered[i][0] + validParams.get(filtered[i][0]) + '$' + (i+1));
         values.push(filtered[i][1])
     }
 
-    if (cond.length > 0) {
-        var queryWhereText = 'WHERE ' + cond.join(' AND ');
+    //Name search
+    var keywordsQueryText = "";
+    var keywords = req.query.keywords;
+    if (keywords !== undefined) {
+        var splitKeywords = keywords.split(' ');
+        if (cond.length > 0) {
+            keywordsQueryText += " AND (";
+        }
+        keywordsQueryText += "name LIKE $" + (values.length+1);
+        values.push(`%` + splitKeywords[0] + `%`);
+        for (let i=1; i<splitKeywords.length; i++) {
+            keywordsQueryText += " OR name LIKE $" + (values.length+1);
+            values.push(`%` + splitKeywords[i] + `%`);
+        }
+        if (cond.length > 0) {
+            keywordsQueryText += ")";
+        }
     }
 
-    // console.log(queryWhereText);
-    // console.log(values);
+    if (values.length > 0 )
+        var queryWhereText = 'WHERE ' + cond.join(' AND ');
 
     //Offset and limit
     var limitOffsetText = "";
@@ -84,11 +103,9 @@ router.get('/', function(req, res, next) {
         values.push(offset);
     }
 
-    console.log('SELECT * FROM items ' + queryWhereText + limitOffsetText)
-
     //Execute query
     db.query(`with item_with_categories as (SELECT items.*, item_categories.cname AS category FROM items left join item_categories on items.iid = item_categories.item_id) ` +
-        `SELECT * FROM item_with_categories ` + queryWhereText + limitOffsetText,
+        `SELECT * FROM item_with_categories ` + queryWhereText + keywordsQueryText + limitOffsetText,
         values,
         (err, data) => {
             if (err !== undefined) {
