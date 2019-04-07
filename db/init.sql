@@ -13,6 +13,10 @@ DROP TABLE IF EXISTS item_review CASCADE;
 DROP TABLE IF EXISTS bids CASCADE;
 DROP TABLE IF EXISTS items_rounds CASCADE;
 
+DROP EXTENSION IF EXISTS citext;
+
+CREATE EXTENSION citext;
+
 CREATE TABLE users (
 	uid			INTEGER,
 	username	VARCHAR(60)		UNIQUE,
@@ -89,11 +93,10 @@ CREATE TABLE borrower_review (
 );
 
 CREATE TABLE item_categories (
-	item_id		INTEGER,
-	uid			INTEGER,
+	item_id			INTEGER,
+	category_name	citext,
 	PRIMARY KEY(item_id, uid),
-	FOREIGN KEY(item_id) REFERENCES items(iid),
-	FOREIGN KEY(uid) REFERENCES users(uid)
+	FOREIGN KEY(item_id) REFERENCES items(iid)
 );
 
 CREATE TABLE wishlist (
