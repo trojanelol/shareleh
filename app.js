@@ -74,6 +74,10 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
 });
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) { return next()  }
+  else { return res.redirect('/') }
+}
 
 //----------//
 // zzsignup //
@@ -214,7 +218,7 @@ app.post('/secret/query', (req, res) => {
 });
 
 // Route get requests to /secret
-app.use('/secret', require('./routes/secret'));
+app.use('/secret', checkAuthentication, require('./routes/secret'));
 
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
