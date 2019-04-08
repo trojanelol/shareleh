@@ -43,8 +43,8 @@ CREATE TABLE users_tasks (
 CREATE TABLE items (
 	iid 				SERIAL PRIMARY KEY,
 	lid					INTEGER REFERENCES users(uid),
-	name 				citext,
-	price			INTEGER NOT NULL DEFAULT 0,
+	name 				citext NOT NULL,
+	price				INTEGER NOT NULL DEFAULT 0,
 	description	 		TEXT,
 	location			citext,
 	start_date 			DATE NOT NULL DEFAULT CURRENT_DATE,
