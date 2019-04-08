@@ -240,6 +240,7 @@ var uploadRouter = require('./routes/upload');
 //APIs
 var browseApiRouter = require('./routes/api/browse');
 var itemsApiRouter = require('./routes/api/items');
+var uploadApiRouter = require('./routes/api/upload');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -271,6 +272,7 @@ app.use('/upload', uploadRouter);
 //APIs
 app.use('/api/browse', browseApiRouter);
 app.use('/api/items', itemsApiRouter);
+app.use('/api/upload', checkAuthentication, uploadApiRouter);
 
 
 // catch 404 and forward to error handler

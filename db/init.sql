@@ -42,7 +42,7 @@ CREATE TABLE users_tasks (
 
 CREATE TABLE items (
 	iid 				SERIAL PRIMARY KEY,
-	lid					INTEGER REFERENCES users(uid),
+	lid					INTEGER NOT NULL REFERENCES users(uid),
 	name 				citext NOT NULL,
 	price				INTEGER NOT NULL DEFAULT 0,
 	description	 		TEXT,
