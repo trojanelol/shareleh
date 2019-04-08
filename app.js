@@ -75,8 +75,8 @@ app.use(function (req, res, next) {
   next();
 });
 function checkAuthentication(req, res, next) {
-  if (req.isAuthenticated()) { return next()  }
-  else { return res.redirect('/') }
+  if (req.isAuthenticated()) { next() }
+  else { res.redirect('/') }
 }
 
 //----------//
@@ -111,10 +111,11 @@ app.post('/zzsignup', function zzsignup(req, res, next) {
         <pre><a href="javascript:history.back()">Go back.</a></pre>
         `);
       } else {
-        res.send(`
-        <h1>zzSignup success, check the database</h1>
-        <pre><a href="javascript:history.back()">Go back.</a></pre>
-        `);
+        passport.authenticate('local')(req, res, ()=>{res.redirect('/')});
+        // res.send(`
+        // <h1>zzSignup success, check the database</h1>
+        // <pre><a href="/">Go back and sign in again.</a></pre>
+        // `);
       }
     }
   );
