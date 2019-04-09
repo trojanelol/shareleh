@@ -22,12 +22,12 @@ router.get('/', function(req, res, next) {
 
     var result1 = 5;
 
-    db.query(`WITH specific_item AS (SELECT * FROM items WHERE iid = $1), ` +
-        `item_calc_rating AS (SELECT iid, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS item_rating FROM item_review GROUP BY iid), ` +
-        `item_rating AS (SELECT * FROM specific_item LEFT JOIN item_calc_rating USING (iid)), ` +
-        `item_user AS (SELECT item_rating.*, users.username as lender_username FROM item_rating JOIN users ON item_rating.lid = users.uid), ` +
-        `user_calc_rating AS (SELECT lid, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS lender_rating FROM lender_review GROUP BY lid) ` +
-        `SELECT * FROM item_user LEFT JOIN user_calc_rating USING (lid)`,
+    db.query(`WITH specific_item AS (SELECT * FROM items WHERE iid = $1),
+        item_calc_rating AS (SELECT iid, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS item_rating FROM item_review GROUP BY iid),
+        item_rating AS (SELECT * FROM specific_item LEFT JOIN item_calc_rating USING (iid)),
+        item_user AS (SELECT item_rating.*, users.username as lender_username FROM item_rating JOIN users ON item_rating.lid = users.uid), 
+        user_calc_rating AS (SELECT lid, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS lender_rating FROM lender_review GROUP BY lid)
+        SELECT * FROM item_user LEFT JOIN user_calc_rating USING (lid)`,
         values,
         (err, data) => {
             if (err !== undefined) {
@@ -44,31 +44,24 @@ router.get('/', function(req, res, next) {
         }
     );
 
-    console.log("Result");
-    console.log(result1);
-
 });
 
 function getItemReviews (res, itemInfo, values) {
 
-    console.log(itemInfo);
-
-    db.query(`WITH review AS (SELECT item_review.reviewer_id, item_review.rating, item_review.comments FROM items JOIN item_review USING (iid)WHERE iid = $1) ` +
-        `SELECT users.username, review.rating, review.comments FROM review JOIN users ON users.uid = review.reviewer_id`,
+    db.query(`WITH review AS (SELECT item_review.reviewer_id, item_review.rating, item_review.comments FROM items JOIN item_review USING (iid)WHERE iid = $1) 
+        SELECT users.username, review.rating, review.comments FROM review JOIN users ON users.uid = review.reviewer_id`,
         values,
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
                 return res.status(500).json({
                     success: false,
-                    message: "Error getting items",
+                    message: "Error getting item reviews",
                     data: null
                 })
             }
 
             Object.assign(itemInfo, {item_reviews: data.rows});
-
-            getMinimumBid(res, itemInfo, values);
             res.json(itemInfo);
         }
     );
