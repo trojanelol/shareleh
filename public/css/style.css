@@ -29,6 +29,22 @@ input[type="button"],input[type="submit"]{
 	-ms-transition:0.5s all;
 }
 
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
 h1,h2,h3,h4,h5,h6{
 	margin:0;
     font-family: 'Open Sans', sans-serif;

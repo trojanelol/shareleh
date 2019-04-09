@@ -236,6 +236,7 @@ var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
 var dashboardRouter = require('./routes/dashboard');
 var uploadRouter = require('./routes/upload');
+var userRouter = require('./routes/user');
 
 //APIs
 var browseApiRouter = require('./routes/api/browse');
@@ -268,6 +269,7 @@ app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/upload', uploadRouter);
+app.use('/user', userRouter);
 
 //APIs
 app.use('/api/browse', browseApiRouter);
