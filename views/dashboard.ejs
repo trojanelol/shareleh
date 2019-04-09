@@ -41,7 +41,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<a href="index">Home</a>
 						<i>|</i>
 					</li>
-					<li>Dashboard</li>
+					<li><%= title%></li>
 				</ul>
 			</div>
 		</div>
@@ -52,7 +52,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="welcome">
 		<div class="container">
 			<!-- tittle heading -->
-			<h3 class="tittle-w3l">Dashboard
+			<h3 class="tittle-w3l"><%= title%>
 				<span class="heading-style">
 					<i></i>
 					<i></i>
@@ -60,26 +60,56 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</span>
 			</h3>
 			<!-- //tittle heading -->
-			<div class="w3l-welcome-info">
-				<div class="col-sm-6 col-xs-6 welcome-grids">
-					<div class="welcome-img">
-						<img src="images/about.jpg" class="img-responsive zoom-img" alt="">
-					</div>
-				</div>
-				<div class="col-sm-6 col-xs-6 welcome-grids">
-					<div class="welcome-img">
-						<img src="images/about2.jpg" class="img-responsive zoom-img" alt="">
-					</div>
-				</div>
-				<div class="clearfix"> </div>
-			</div>
 			<div class="w3l-welcome-text">
-				<p>Nam libero tempore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus
-					omnis optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.Sed ut perspiciatis unde omnis iste
-					natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
-					et quasi architecto beatae vitae </p>
-				<p>libero tempore cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus
-					omnis optio cumque nihil impedit </p>
+				<div class="contact-form wthree">
+					<h3>Your Tasks</h3><br>
+						<table>
+							<tr>
+		    				<th>Task</th>
+		    				<th>Progress</th>
+		  			</tr>
+						<% for(var i=0; i < tasks.length; i++) { %>
+		   				<tr>
+		     				<td><%= tasks[i].task %> </td>
+								<td><%= tasks[i].progress %> </td>
+		   				</tr>
+						<% } %>
+						</table>
+					</div><br><br>
+					<div class="contact-form wthree">
+						<h3>Your Loan Items</h3><br>
+							<table>
+								<tr>
+			    				<th>Item</th>
+			    				<th>Return Date</th>
+									<th>Lender</th>
+			  			</tr>
+							<% for(var i=0; i < loan_items.length; i++) { %>
+			   				<tr>
+			     				<td><%= loan_items[i].item %> </td>
+									<td><%= loan_items[i].return_date %> </td>
+									<td><%= loan_items[i].lender %> </td>
+			   				</tr>
+							<% } %>
+							</table>
+						</div><br><br>
+						<div class="contact-form wthree">
+							<h3>Your Listings</h3><br>
+								<table>
+									<tr>
+				    				<th>Item</th>
+				    				<th>Return Date</th>
+										<th>Borrower</th>
+				  			</tr>
+								<% for(var i=0; i < listings.length; i++) { %>
+				   				<tr>
+				     				<td><%= listings[i].item %> </td>
+										<td><%= listings[i].return_date %> </td>
+										<td><%= listings[i].borrower %> </td>
+				   				</tr>
+								<% } %>
+								</table>
+							</div>
 			</div>
 		</div>
 	</div>
