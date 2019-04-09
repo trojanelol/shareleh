@@ -1,16 +1,16 @@
-DELETE FROM users;
-DELETE FROM admins;
-DELETE FROM items;
-DELETE FROM rounds;
-DELETE FROM bids;
-DELETE FROM user_following;
+DELETE FROM wishlist;
+DELETE FROM item_categories;
 DELETE FROM item_review;
 DELETE FROM borrower_review;
 DELETE FROM lender_review;
-DELETE FROM wishlist;
-DELETE FROM item_categories;
+DELETE FROM bids;
+DELETE FROM rounds;
+DELETE FROM items;
+DELETE FROM user_following;
+DELETE FROM user_tasks;
 DELETE FROM tasks;
-DELETE FROM users_tasks;
+DELETE FROM admins;
+DELETE FROM users;
 
 -- users
 
@@ -30,37 +30,56 @@ INSERT INTO
 users (username, password)
 VALUES ('user4', 'user4password');
 
-INSERT INTO
-items (item_name, lender, lender_price, lender_comments, location, start_date)
-VALUES ('Playstation 4', 1, 1.00, 'Can be eaten. Trust me.', 'east', '2019-05-07'::date);
+INSERT INTO 
+admins (uid) 
+VALUES (2);
+
+-- Tasks
+INSERT INTO tasks (tname, description) VALUES ('UPLOAD_ITEM', 'Upload an item');
+
+INSERT INTO tasks (tname, description) VALUES ('FOLLOW_USER','Follow another user');
+
+INSERT INTO tasks (tname, description) VALUES ('ADD_TO_WISHLIST','Add an item to wishlist');
 
 -- items
 
 INSERT INTO
-items (item_name, lender, lender_price, lender_comments, location, start_date)
-VALUES ('Cactus Plant', 2, 2.00, 'Fake.', 'north', '2019-06-07'::date);
+items (name, lid, price, description, location, start_date)
+VALUES ('Playstation 4', 1, 1.00, 'Literally unplayable.', 'east', '2019-05-07'::date);
 
 INSERT INTO
-items (item_name, lender, lender_price, lender_comments, location, start_date)
-VALUES ('Pie Decoration', 3, 3.00, '3.1415926535', 'west', '2019-07-07'::date);
+items (name, lid, price, description, location, start_date)
+VALUES ('Cactus Plant', 1, 2.00, 'Fake.', 'north', '2019-06-07'::date);
 
 INSERT INTO
-items (item_name, lender, lender_price, lender_comments, location)
-VALUES ('Mini Portable BBQ Grill Rack', 4, 4.00, 'Portable Grill, Handle at the side for easy usage, Vent holes at the side of racks', 'west');
+items (name, lid, price, description, location, start_date)
+VALUES ('Pie Decoration', 1, 3.00, '3.1415926535', 'west', '2019-07-07'::date);
+
+INSERT INTO
+items (name, lid, price, description, location)
+VALUES ('Mini Portable BBQ Grill Rack', 1, 4.00, 'Portable Grill, Handle at the side for easy usage, Vent holes at the side of racks', 'west');
 
 -- categories
 
-INSERT INTO items_categories (item, category) VALUES (1, 'Gaming');
+INSERT INTO 
+item_categories (iid, cname) 
+VALUES (1, 'Gaming');
 
-INSERT INTO items_categories (item, category) VALUES (2, 'Furniture');
+INSERT INTO 
+item_categories (iid, cname) 
+VALUES (2, 'Furniture');
 
-INSERT INTO items_categories (item, category) VALUES (3, 'Outdoors');
+INSERT INTO 
+item_categories (iid, cname) 
+VALUES (3, 'Outdoors');
 
-INSERT INTO items_categories (item, category) VALUES (4, 'Kitchen');
+INSERT INTO 
+item_categories (iid, cname) 
+VALUES (4, 'Kitchen');
 
 -- reviews
 
-INSERT INTO item_review (item, reviewer, rating, comments, review_date)
+INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
 VALUES (1, 2, 4.6, 'Fantastic condition. Thought it was brand new.',  '2019-06-07'::date);
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)

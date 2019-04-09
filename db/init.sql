@@ -19,51 +19,51 @@ DROP TABLE IF EXISTS lender_review CASCADE;
 DROP TABLE IF EXISTS wishlist CASCADE;
 DROP TABLE IF EXISTS item_categories CASCADE;
 DROP TABLE IF EXISTS tasks CASCADE;
-DROP TABLE IF EXISTS users_tasks CASCADE;
+DROP TABLE IF EXISTS user_tasks CASCADE;
 
 DROP EXTENSION IF EXISTS citext;
 CREATE EXTENSION citext;
 
 CREATE TABLE users (
-    uid SERIAL,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT,
+    uid         SERIAL,
+    username    TEXT NOT NULL UNIQUE,
+    password    TEXT,
     PRIMARY KEY (uid)
 );
 
 CREATE TABLE admins (
-    uid INTEGER REFERENCES users (uid),
+    uid    INTEGER REFERENCES users (uid),
     PRIMARY KEY (uid)
 );
 
 CREATE TABLE items (
-    iid SERIAL,
-    current_round INTEGER, -- REFERENCES rounds (rid)
-    name citext NOT NULL,
-    lid INTEGER NOT NULL REFERENCES users (uid),
-    price NUMERIC(15,2) NOT NULL DEFAULT 0,
-    description TEXT,
-    location citext,
-    start_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    end_date DATE NOT NULL DEFAULT '9999-01-01',
+    iid            SERIAL,
+    current_round  INTEGER, -- REFERENCES rounds (rid)
+    name           CITEXT    NOT NULL,
+    lid            INTEGER NOT NULL REFERENCES users (uid),
+    price          NUMERIC(15,2) NOT NULL DEFAULT 0,
+    description    TEXT,
+    location       CITEXT,
+    start_date     DATE NOT NULL DEFAULT CURRENT_DATE,
+    end_date       DATE NOT NULL DEFAULT '9999-01-01',
     PRIMARY KEY (iid)
 );
 
 CREATE TABLE rounds (
-    rid SERIAL,
-    iid INTEGER NOT NULL, -- REFERENCES items (iid)
-    winning_bid_id INTEGER, -- REFERENCES bids (bid)
+    rid               SERIAL,
+    iid               INTEGER NOT NULL, -- REFERENCES items (iid)
+    winning_bid_id    INTEGER, -- REFERENCES bids (bid)
     PRIMARY KEY (rid)
 );
 
 CREATE TABLE bids (
-    bid SERIAL,
-    rid INTEGER, -- REFERENCES rounds (rid)
-    borrower INTEGER REFERENCES users (uid),
-    borrower_price NUMERIC(15,2) NOT NULL DEFAULT 0,
-    borrower_comments TEXT,
-    return_date DATE,
-    bid_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    bid                  SERIAL,
+    rid                  INTEGER, -- REFERENCES rounds (rid)
+    borrower             INTEGER REFERENCES users (uid),
+    borrower_price       NUMERIC(15,2) NOT NULL DEFAULT 0,
+    borrower_comments    TEXT,
+    return_date          DATE,
+    bid_date             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (bid)
 );
 
@@ -73,64 +73,62 @@ ALTER TABLE rounds ADD CONSTRAINT rounds_winning_bid_id_fkey FOREIGN KEY (winnin
 ALTER TABLE bids ADD CONSTRAINT bids_rid_fkey FOREIGN KEY (rid) REFERENCES rounds (rid);
 
 CREATE TABLE user_following (
-    follower_id INTEGER REFERENCES users (uid),
-    following_id INTEGER REFERENCES users (uid),
+    follower_id     INTEGER REFERENCES users (uid),
+    following_id    INTEGER REFERENCES users (uid),
     PRIMARY KEY (follower_id, following_id)
 );
 
 CREATE TABLE item_review (
-    irid SERIAL,
-    iid INTEGER REFERENCES items (iid),
-    reviewer_id INTEGER REFERENCES users (uid),
-    rating INTEGER NOT NULL,
-    comments TEXT,
-    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    irid           SERIAL,
+    iid            INTEGER REFERENCES items (iid),
+    reviewer_id    INTEGER REFERENCES users (uid),
+    rating         INTEGER NOT NULL,
+    comments       TEXT,
+    review_date    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (irid)
 );
 
 CREATE TABLE borrower_review (
-    brid SERIAL,
-    bid INTEGER REFERENCES users (uid),
-    reviewer_id  INTEGER REFERENCES users (uid),
-    rating INTEGER NOT NULL,
-    comments TEXT,
-    review_date TIMESTAMP,
+    brid           SERIAL,
+    bid            INTEGER REFERENCES users (uid),
+    reviewer_id    INTEGER REFERENCES users (uid),
+    rating         INTEGER NOT NULL,
+    comments       TEXT,
+    review_date    TIMESTAMP,
     PRIMARY KEY (brid)
 );
 
 CREATE TABLE lender_review (
-    lrid SERIAL,
-    lid INTEGER REFERENCES users (uid),
-    reviewer_id INTEGER REFERENCES users (uid),
-    rating INTEGER NOT NULL,
-    comments TEXT,
-    review_date TIMESTAMP,
+    lrid           SERIAL,
+    lid            INTEGER REFERENCES users (uid),
+    reviewer_id    INTEGER REFERENCES users (uid),
+    rating         INTEGER NOT NULL,
+    comments       TEXT,
+    review_date    TIMESTAMP,
     PRIMARY KEY (lrid)
 );
 
 CREATE TABLE wishlist (
-    uid INTEGER REFERENCES users (uid),
-    iid INTEGER REFERENCES items (iid),
+    uid    INTEGER REFERENCES users (uid),
+    iid    INTEGER REFERENCES items (iid),
     PRIMARY KEY (uid, iid)
 );
 
-CREATE TABLE items_categories (
-    iid INTEGER REFERENCES items (iid),
-    cname citext,
+CREATE TABLE item_categories (
+    iid      INTEGER REFERENCES items (iid),
+    cname    CITEXT,
     PRIMARY KEY(iid, cname)
 );
 
 CREATE TABLE tasks (
-    tid SERIAL,
-    task citext,
-    description TEXT,
-    PRIMARY KEY (tid)
+	tname          CITEXT PRIMARY KEY,
+	description    TEXT NOT NULL
 );
 
-CREATE TABLE users_tasks (
-    uid INTEGER REFERENCES users (uid),
-    tid INTEGER REFERENCES tasks (tid),
-    PRIMARY KEY(uid, tid)
+CREATE TABLE user_tasks (
+	task_name    CITEXT REFERENCES tasks(tname),
+	uid          INTEGER REFERENCES users(uid),
+	PRIMARY KEY(task_name, uid)
 );
 
 -- CREATE OR REPLACE FUNCTION update_changetimestamp_column()
@@ -151,3 +149,68 @@ CREATE TABLE users_tasks (
 --   RETURN NEW;
 -- END;
 -- $$ LANGUAGE plpgsql;
+
+
+/* Task triggers */
+
+-- Upload item trigger
+CREATE OR REPLACE FUNCTION trig_upload_item_func()
+RETURNS TRIGGER AS $$
+BEGIN
+
+	IF NOT EXISTS (SELECT * FROM user_tasks WHERE user_tasks.uid = NEW.lid AND user_tasks.task_name = 'UPLOAD_ITEM') THEN
+		INSERT INTO user_tasks (task_name, uid) VALUES ('UPLOAD_ITEM', NEW.lid);
+	END IF;
+
+	RETURN NEW;
+END
+
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trig_upload_item
+AFTER INSERT ON items
+FOR EACH ROW
+EXECUTE PROCEDURE trig_upload_item_func();
+
+-- Follow another user trigger
+CREATE OR REPLACE FUNCTION trig_follow_user_func()
+RETURNS TRIGGER AS $$
+BEGIN
+
+	IF NOT EXISTS (SELECT * FROM user_tasks WHERE user_tasks.uid = NEW.follower_id AND user_tasks.task_name = 'FOLLOW_USER') THEN
+		INSERT INTO user_tasks (task_name, uid) VALUES ('FOLLOW_USER', NEW.follower_id);
+	END IF;
+
+	RETURN NEW;
+END
+
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trig_follow_user ON user_following;
+
+CREATE TRIGGER trig_follow_user
+AFTER INSERT ON user_following
+FOR EACH ROW
+EXECUTE PROCEDURE trig_follow_user_func();
+
+-- Add an item to wishlist trigger
+
+CREATE OR REPLACE FUNCTION trig_add_to_wishlist_func()
+RETURNS TRIGGER AS $$
+BEGIN
+
+	IF NOT EXISTS (SELECT * FROM user_tasks WHERE user_tasks.uid = NEW.uid AND user_tasks.task_name = 'ADD_TO_WISHLIST') THEN
+		INSERT INTO user_tasks (task_name, uid) VALUES ('ADD_TO_WISHLIST', NEW.uid);
+	END IF;
+
+	RETURN NEW;
+END
+
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trig_add_to_wishlist ON wishlist;
+
+CREATE TRIGGER trig_add_to_wishlist
+AFTER INSERT ON wishlist
+FOR EACH ROW
+EXECUTE PROCEDURE trig_add_to_wishlist_func();
