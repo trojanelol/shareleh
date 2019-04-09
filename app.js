@@ -74,6 +74,10 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
 });
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) { next() }
+  else { res.redirect('/') }
+}
 
 //----------//
 // zzsignup //
@@ -107,10 +111,11 @@ app.post('/zzsignup', function zzsignup(req, res, next) {
         <pre><a href="javascript:history.back()">Go back.</a></pre>
         `);
       } else {
-        res.send(`
-        <h1>zzSignup success, check the database</h1>
-        <pre><a href="javascript:history.back()">Go back.</a></pre>
-        `);
+        passport.authenticate('local')(req, res, ()=>{res.redirect('/')});
+        // res.send(`
+        // <h1>zzSignup success, check the database</h1>
+        // <pre><a href="/">Go back and sign in again.</a></pre>
+        // `);
       }
     }
   );
@@ -214,7 +219,7 @@ app.post('/secret/query', (req, res) => {
 });
 
 // Route get requests to /secret
-app.use('/secret', require('./routes/secret'));
+app.use('/secret', checkAuthentication, require('./routes/secret'));
 
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
@@ -229,9 +234,13 @@ var product2Router = require('./routes/product2');
 var singleRouter = require('./routes/single');
 var single2Router = require('./routes/single2');
 var termsRouter = require('./routes/terms');
-var itemsApiRouter = require('./routes/api/items');
 var dashboardRouter = require('./routes/dashboard');
 var uploadRouter = require('./routes/upload');
+
+//APIs
+var browseApiRouter = require('./routes/api/browse');
+var itemsApiRouter = require('./routes/api/items');
+var uploadApiRouter = require('./routes/api/upload');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -259,7 +268,11 @@ app.use('/single2', single2Router);
 app.use('/terms', termsRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/upload', uploadRouter);
+
+//APIs
+app.use('/api/browse', browseApiRouter);
 app.use('/api/items', itemsApiRouter);
+app.use('/api/upload', checkAuthentication, uploadApiRouter);
 
 
 // catch 404 and forward to error handler
