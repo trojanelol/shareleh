@@ -159,6 +159,26 @@
 										<div class="clearfix"> </div>
 									</div>
 								</div>
+
+								<div class="contact-form wthree">
+									<h3>Item Review</h3>
+									<table>
+										<tr>
+					    				<th>Reviewee</th>
+					    				<th>Rating</th>
+					    				<th>Comment</th>
+					  			</tr>
+									<% for(var i=0; i < reviews.length; i++) { %>
+					   				<tr>
+					     				<td><%= reviews[i].reviewee %> </td>
+											<td><%= reviews[i].rating %> </td>
+											<td>"<%= reviews[i].comment %>"</td>
+					   				</tr>
+									<% } %>
+									</table>
+								</div>
+								<h3><br></h3>
+
 								<!-- //Single Page -->
 
 								<!-- js-files -->
