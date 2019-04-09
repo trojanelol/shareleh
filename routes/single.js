@@ -5,6 +5,8 @@ router.get('/', function(req, res, next) {
   var data =
   {
 	title : "Flower Pot",
+  img: "images/si.jpg",
+  rating: "4",
 	price : "100",
 	description :"Great as an example",
 	location : "East",
