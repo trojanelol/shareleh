@@ -115,7 +115,11 @@ router.get('/', function(req, res, next) {
         (err, data) => {
             if (err !== undefined) {
                 console.log(err)
-                res.render("An error has occurred.");
+                return res.status(500).json({
+                    success: false,
+                    message: "Error getting items from the db",
+                    data: null
+                })
             }
             res.json(data.rows)
         }

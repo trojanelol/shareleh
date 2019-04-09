@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
     let lenderID = req.user.uid;
     if (lenderID === undefined) {
         return res.status(400).json({
-            status: false,
+            success: false,
             message: "Error retrieving lender ID",
             data: null
         })
@@ -29,7 +29,7 @@ router.post('/', function(req, res, next) {
     let name = req.body.name;
     if (name === undefined) {
         return res.status(400).json({
-            status: false,
+            success: false,
             message: "Error getting item name",
             data: null
         })
@@ -68,7 +68,7 @@ router.post('/', function(req, res, next) {
     }
 
     console.log(startDate)
-    console.log("to_date($" + (cond.length+1) + ", 'MM/DD/YYYY')")
+    console.log("to_date($" + (cond.length+1) + ", 'MM/DD/YYYY')");
 
     let endDate = req.body.end_date;
     if (endDate !== undefined) {
@@ -86,7 +86,11 @@ router.post('/', function(req, res, next) {
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
-                res.render("An error has occurred.");
+                return res.status(500).json({
+                    success: false,
+                    message: "Error inserting item into database",
+                    data: null
+                })
             }
 
             res.json(data.rows)
