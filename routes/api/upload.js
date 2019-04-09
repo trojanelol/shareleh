@@ -67,7 +67,7 @@ router.post('/', function(req, res, next) {
         values.push(startDate);
     }
 
-    console.log(startDate)
+    console.log(startDate);
     console.log("to_date($" + (cond.length+1) + ", 'MM/DD/YYYY')");
 
     let endDate = req.body.end_date;
@@ -81,21 +81,59 @@ router.post('/', function(req, res, next) {
     var queryCondText = "(" + cond.join(', ') + ")";
 
 
-    db.query(`INSERT INTO items ` + queryColumnText + ` VALUES ` + queryCondText,
-        values,
-        (err, data) => {
-            if (err !== undefined) {
-                console.log(err);
-                return res.status(500).json({
-                    success: false,
-                    message: "Error inserting item into database",
-                    data: null
+    //Connect to db for transaction
+    db.connect((err, client, done) => {
+
+        const shouldAbort = (err) => {
+            if (err) {
+                console.error('Error in transaction', err.stack);
+                client.query('ROLLBACK', (err) => {
+                    if (err) {
+                        console.error('Error rolling back client', err.stack)
+                    }
+                    // release the client back to the pool
+                    done()
                 })
             }
-
-            res.json(data.rows)
+            return !!err
         }
-    );
+
+        client.query('BEGIN', (err) => {
+            if (shouldAbort(err)) return;
+            client.query(`INSERT INTO items ` + queryColumnText + ` VALUES ` + queryCondText + ` RETURNING iid`, values, (err, data) => {
+                if (shouldAbort(err)) return
+
+                console.log("data row");
+                console.log(data.rows);
+
+                client.query(`INSERT INTO rounds (iid) VALUES ($1) RETURNING rid `, [data.rows[0].iid], (err, data) => {
+                    if (shouldAbort(err)) return;
+
+                    client.query(`UPDATE items SET current_round = $1 `, [data.rows[0].rid], (err, data) => {
+                        if (shouldAbort(err)) return;
+
+                        client.query('COMMIT', (err) => {
+                            if (err) {
+                                console.error('Error committing transaction', err.stack)
+                                return res.status(500).json({
+                                    success: false,
+                                    message: "Error committing item upload transaction",
+                                    data: null
+                                })
+                            }
+                            done();
+
+                            return res.json({
+                                success: true,
+                                message: "Item uploaded",
+                                data: null
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    }) //End of transaction
 
 });
 
