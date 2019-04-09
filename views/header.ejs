@@ -20,11 +20,6 @@
     <div class="col-md-8 header">
       <!-- header lists -->
       <ul>
-        <% if (signedin) { %>
-        <li>
-          <span class="fa fa-phone" aria-hidden="true"></span><a href="secret">Make a query</a>
-        </li>
-        <% } %>
         <!-- <li> -->
         <!--   <a class="play&#45;icon popup&#45;with&#45;zoom&#45;anim" href="#small&#45;dialog1"> -->
         <!--     <span class="fa fa&#45;map&#45;marker" aria&#45;hidden="true"></span>Select Your Region</a> -->
@@ -47,13 +42,16 @@
         </li>
         <% } else { %>
         <li>
-          Welcome, <%= user.username %>
-        </li>
-        <li>
-          <a href="upload">Upload</a>
+          <a href="secret">Welcome, <%= user.username %></a>
         </li>
         <li>
           <a href="dashboard">Dashboard</a>
+        </li>
+        <li>
+          <a href="">Browse</a>
+        </li>
+        <li>
+          <a href="upload">Upload</a>
         </li>
         <li>
           <span class="fa fa-truck" aria-hidden="true"></span><a href="/signout">Sign Out</a>
