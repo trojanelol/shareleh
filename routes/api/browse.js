@@ -108,14 +108,18 @@ router.get('/', function(req, res, next) {
 
     //Execute query
     //left join with item_categories last to prevent duplicates
-    db.query(`WITH calc_avg AS (SELECT iid, ROUND(AVG(rating)::NUMERIC,2) AS rating FROM item_review GROUP BY iid), ` +
-        `items_with_ratings AS (SELECT * FROM items LEFT JOIN calc_avg USING (iid)) ` +
-        `SELECT DISTINCT items_with_ratings.* FROM items_with_ratings LEFT JOIN item_categories USING (iid) ` + queryWhereText + keywordsQueryText + limitOffsetText,
+    db.query(`WITH calc_avg AS (SELECT iid, ROUND(AVG(rating)::NUMERIC,2) AS rating FROM item_review GROUP BY iid),
+        items_with_ratings AS (SELECT * FROM items LEFT JOIN calc_avg USING (iid))
+        SELECT DISTINCT items_with_ratings.* FROM items_with_ratings LEFT JOIN item_categories USING (iid) ` + queryWhereText + keywordsQueryText + limitOffsetText,
         values,
         (err, data) => {
             if (err !== undefined) {
                 console.log(err)
-                res.render("An error has occurred.");
+                return res.status(500).json({
+                    success: false,
+                    message: "Error getting items from the db",
+                    data: null
+                })
             }
             res.json(data.rows)
         }

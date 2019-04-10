@@ -36,6 +36,15 @@ CREATE TABLE admins (
     PRIMARY KEY (uid)
 );
 
+/*current_round point to current/latest bidding round
+	check current_round with rounds to see winning bid 
+	(and then bids table for winning borrower)
+	
+	available will have 3 states
+	true: available
+	false: on loan
+	null: deleted/removed (nt sure if this will backfire)
+*/
 CREATE TABLE items (
     iid            SERIAL,
     current_round  INTEGER, -- REFERENCES rounds (rid)
@@ -44,6 +53,7 @@ CREATE TABLE items (
     price          NUMERIC(15,2) NOT NULL DEFAULT 0,
     description    TEXT,
     location       CITEXT,
+	available      BOOLEAN DEFAULT TRUE,
     start_date     DATE NOT NULL DEFAULT CURRENT_DATE,
     end_date       DATE NOT NULL DEFAULT '9999-01-01',
     PRIMARY KEY (iid)
