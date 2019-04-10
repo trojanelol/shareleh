@@ -53,8 +53,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			<!-- tittle heading -->
 			<h3 class="tittle-w3l">
-			<button type="button" onclick="alert('Followed <%= user.name%>')">Follow</button>
-			<%= user.name%> (<%= user.ratings%> star lender)
+			<button type="button" onclick="alert('Followed <%= user.username%>')">Follow</button>
+			<%= user.username %> (<%= users.ratings%> star lender)
 			</h3>
 			<!-- //tittle heading -->
 
@@ -66,11 +66,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     				<th>Rating</th>
     				<th>Comment</th>
   			</tr>
-				<% for(var i=0; i < user.reviews.length; i++) { %>
+				<% for(var i=0; i < users.reviews.length; i++) { %>
    				<tr>
-     				<td><%= user.reviews[i].reviewee %> </td>
-						<td><%= user.reviews[i].rating %> </td>
-						<td>"<%= user.reviews[i].comment %>"</td>
+     				<td><%= users.reviews[i].reviewee %> </td>
+						<td><%= users.reviews[i].rating %> </td>
+						<td>"<%= users.reviews[i].comment %>"</td>
    				</tr>
 				<% } %>
 				</table>

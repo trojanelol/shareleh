@@ -4,7 +4,6 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   var data =
   {
-  username: "trojane",
 	title : "Flower Pot",
   img: "images/si.jpg",
   rating: "5",
