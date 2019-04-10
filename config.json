@@ -1,0 +1,16 @@
+{
+    "pg": {
+        "database": "shareleh",
+        "user": "postgres",
+        "password": "q83wk7",
+        "schema": "public"
+    },
+    "server": {
+        "port": 3030
+    },
+    "app": {
+        "layouts": true,
+        "themes": true,
+        "languages": true
+    }
+}
