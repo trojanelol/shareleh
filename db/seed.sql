@@ -77,6 +77,38 @@ INSERT INTO
 item_categories (iid, cname) 
 VALUES (4, 'Kitchen');
 
+INSERT INTO
+item_categories (iid, cname)
+VALUES (5, Health);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (6, Baby);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (7, Music);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (8,Shoes);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (9, Beauty);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (10 ,Home);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (11, Garden);
+
+INSERT INTO
+item_categories (iid, cname)
+VALUES (12, Movies);
+
 -- reviews
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
