@@ -21,22 +21,23 @@ ALTER SEQUENCE borrower_review_brid_seq RESTART WITH 1;
 ALTER SEQUENCE lender_review_lrid_seq RESTART WITH 1;
 
 -- Users
+CREATE EXTENSION pgcrypto;
 
 INSERT INTO
 users (username, password)
-VALUES ('user1', 'user1password');
+VALUES ('user1', crypt('password1', gen_salt('bf', 8)));
 
 INSERT INTO
 users (username, password)
-VALUES ('user2', 'user2password');
+VALUES ('admin', crypt('AAaa11', gen_salt('bf', 8)));
 
 INSERT INTO
 users (username, password)
-VALUES ('user3', 'user3password');
+VALUES ('user3', crypt('password3', gen_salt('bf', 8)));
 
 INSERT INTO
 users (username, password)
-VALUES ('user4', 'user4password');
+VALUES ('user4', crypt('password4', gen_salt('bf', 8)));
 
 INSERT INTO
 admins (uid)
