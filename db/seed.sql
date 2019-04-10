@@ -106,10 +106,6 @@ INSERT INTO
 item_categories (iid, cname)
 VALUES (11, Garden);
 
-INSERT INTO
-item_categories (iid, cname)
-VALUES (12, Movies);
-
 -- Reviews
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
