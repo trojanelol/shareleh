@@ -100,7 +100,7 @@ VALUES (9, Beauty);
 
 INSERT INTO
 item_categories (iid, cname)
-VALUES (10 ,Home);
+VALUES (10, Home);
 
 INSERT INTO
 item_categories (iid, cname)
