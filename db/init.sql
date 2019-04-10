@@ -24,6 +24,9 @@ DROP TABLE IF EXISTS user_tasks CASCADE;
 DROP EXTENSION IF EXISTS citext;
 CREATE EXTENSION citext;
 
+DROP EXTENSION IF EXISTS pgcrypto;
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE users (
     uid         SERIAL,
     username    TEXT NOT NULL UNIQUE,
