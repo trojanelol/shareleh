@@ -105,11 +105,7 @@ app.post('/zzsignup', function zzsignup(req, res, next) {
     [username, password],
     (err, data) => {
       if(err) {
-        res.send(`
-        <h1>zzSignup failure</h1>
-        ${JSON.stringify(err)}
-        <pre><a href="javascript:history.back()">Go back.</a></pre>
-        `);
+        res.redirect('/index');
       } else {
         passport.authenticate('local')(req, res, ()=>{res.redirect('/')});
         // res.send(`
@@ -156,11 +152,7 @@ app.post(
   }
 );
 app.get('/signinfail', function(req, res, next) {
-  res.send(`
-  <pre>
-  Sorry, your username or password is incorrect. <a href="javascript:history.back()">Go back.</a>
-  </pre>
-  `);
+  res.redirect('/');
 });
 app.get('/signout', function(req, res){
   req.logout();
