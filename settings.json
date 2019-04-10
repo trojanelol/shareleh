@@ -1,292 +1,4 @@
 {
-    "basket": {
-        "slug": "basket",
-        "table": {
-            "name": "basket",
-            "pk": "bid",
-            "verbose": "basket"
-        },
-        "columns": [
-            {
-                "name": "bid",
-                "verbose": "bid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "user_id",
-                "verbose": "user_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
-    "categories": {
-        "slug": "categories",
-        "table": {
-            "name": "categories",
-            "pk": "cid",
-            "verbose": "categories"
-        },
-        "columns": [
-            {
-                "name": "cid",
-                "verbose": "cid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "name",
-                "verbose": "name",
-                "control": {
-                    "text": true
-                },
-                "type": "varchar(60)",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
-    "offers": {
-        "slug": "offers",
-        "table": {
-            "name": "offers",
-            "pk": "ofid",
-            "verbose": "offers"
-        },
-        "columns": [
-            {
-                "name": "ofid",
-                "verbose": "ofid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "user_id",
-                "verbose": "user_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "item_id",
-                "verbose": "item_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "price",
-                "verbose": "price",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "deadline",
-                "verbose": "deadline",
-                "control": {
-                    "text": true
-                },
-                "type": "timestamp",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "pickup_location",
-                "verbose": "pickup_location",
-                "control": {
-                    "text": true
-                },
-                "type": "text",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "return_location",
-                "verbose": "return_location",
-                "control": {
-                    "text": true
-                },
-                "type": "text",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
-    "basket_items": {
-        "slug": "basket_items",
-        "table": {
-            "name": "basket_items",
-            "pk": "",
-            "verbose": "basket_items"
-        },
-        "columns": [
-            {
-                "name": "basket_id",
-                "verbose": "basket_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "item_id",
-                "verbose": "item_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
     "users": {
         "slug": "users",
         "table": {
@@ -512,6 +224,22 @@
                 }
             },
             {
+                "name": "available",
+                "verbose": "available",
+                "control": {
+                    "text": true
+                },
+                "type": "char",
+                "allowNull": true,
+                "defaultValue": "true",
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
                 "name": "start_date",
                 "verbose": "start_date",
                 "control": {
@@ -536,74 +264,6 @@
                 "type": "date",
                 "allowNull": false,
                 "defaultValue": "'9999-01-01'::date",
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
-    "rounds": {
-        "slug": "rounds",
-        "table": {
-            "name": "rounds",
-            "pk": "rid",
-            "verbose": "rounds"
-        },
-        "columns": [
-            {
-                "name": "rid",
-                "verbose": "rid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "iid",
-                "verbose": "iid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "winning_bid_id",
-                "verbose": "winning_bid_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": true,
-                "defaultValue": null,
                 "listview": {
                     "show": true
                 },
@@ -755,6 +415,74 @@
             "readonly": false
         }
     },
+    "rounds": {
+        "slug": "rounds",
+        "table": {
+            "name": "rounds",
+            "pk": "rid",
+            "verbose": "rounds"
+        },
+        "columns": [
+            {
+                "name": "rid",
+                "verbose": "rid",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "iid",
+                "verbose": "iid",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "winning_bid_id",
+                "verbose": "winning_bid_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
     "user_following": {
         "slug": "user_following",
         "table": {
@@ -782,58 +510,6 @@
             {
                 "name": "following_id",
                 "verbose": "following_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
-    "user_tasks": {
-        "slug": "user_tasks",
-        "table": {
-            "name": "user_tasks",
-            "pk": "",
-            "verbose": "user_tasks"
-        },
-        "columns": [
-            {
-                "name": "task_name",
-                "verbose": "task_name",
-                "control": {
-                    "text": true
-                },
-                "type": "USER-DEFINED",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "uid",
-                "verbose": "uid",
                 "control": {
                     "text": true
                 },
@@ -1342,6 +1018,58 @@
                     "text": true
                 },
                 "type": "text",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "user_tasks": {
+        "slug": "user_tasks",
+        "table": {
+            "name": "user_tasks",
+            "pk": "",
+            "verbose": "user_tasks"
+        },
+        "columns": [
+            {
+                "name": "task_name",
+                "verbose": "task_name",
+                "control": {
+                    "text": true
+                },
+                "type": "USER-DEFINED",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "uid",
+                "verbose": "uid",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
                 "allowNull": false,
                 "defaultValue": null,
                 "listview": {
