@@ -5,8 +5,7 @@ router.get('/', function(req, res, next) {
   var data =
   {
 	title : "User Profile",
-  user: {
-    name: "trojane",
+  users: {
     ratings: "5",
     reviews: [
       {reviewee: "butcher1234", rating: "5", comment: "cool lender"},

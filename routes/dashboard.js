@@ -5,7 +5,6 @@ router.get('/', function(req, res, next) {
   var data =
   {
   	title : "Dashboard",
-    user: "butcher1234",
     tasks: [
         {task: "Upload one item", progress: "Done"},
         {task: "Borrow one item", progress: "Done"}
