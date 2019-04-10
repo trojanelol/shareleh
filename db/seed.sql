@@ -12,6 +12,14 @@ DELETE FROM tasks;
 DELETE FROM admins;
 DELETE FROM users;
 
+ALTER SEQUENCE users_uid_seq RESTART WITH 1;
+ALTER SEQUENCE items_iid_seq RESTART WITH 1;
+ALTER SEQUENCE rounds_rid_seq RESTART WITH 1;
+ALTER SEQUENCE bids_bid_seq RESTART WITH 1;
+ALTER SEQUENCE item_review_irid_seq RESTART WITH 1;
+ALTER SEQUENCE borrower_review_brid_seq RESTART WITH 1;
+ALTER SEQUENCE lender_review_lrid_seq RESTART WITH 1;
+
 -- Users
 
 INSERT INTO
@@ -30,8 +38,8 @@ INSERT INTO
 users (username, password)
 VALUES ('user4', 'user4password');
 
-INSERT INTO 
-admins (uid) 
+INSERT INTO
+admins (uid)
 VALUES (2);
 
 -- Tasks
@@ -62,64 +70,32 @@ VALUES ('Mini Portable BBQ Grill Rack', 1, 4.00, 'Portable Grill, Handle at the 
 
 -- Categories
 
-INSERT INTO 
-item_categories (iid, cname) 
-VALUES (1, 'Gaming');
+INSERT INTO
+item_categories (iid, cname)
+VALUES (1, 'Video Games');
 
-INSERT INTO 
-item_categories (iid, cname) 
+INSERT INTO
+item_categories (iid, cname)
 VALUES (2, 'Furniture');
 
-INSERT INTO 
-item_categories (iid, cname) 
-VALUES (3, 'Outdoors');
-
-INSERT INTO 
-item_categories (iid, cname) 
-VALUES (4, 'Kitchen');
+INSERT INTO
+item_categories (iid, cname)
+VALUES (3, 'Party Sets');
 
 INSERT INTO
 item_categories (iid, cname)
-VALUES (5, Health);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (6, Baby);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (7, Music);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (8,Shoes);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (9, Beauty);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (10, Home);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (11, Garden);
-
-INSERT INTO
-item_categories (iid, cname)
-VALUES (12, Movies);
+VALUES (4, 'Kitchenware');
 
 -- Reviews
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
-VALUES (1, 2, 4.6, 'Fantastic condition. Thought it was brand new.',  '2019-06-07'::date);
+VALUES (1, 2, 5, 'Fantastic condition. Thought it was brand new.',  '2019-06-07'::date);
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
-VALUES (3, 2, 2.6, 'Looked too real for a decoration.',  '2019-07-07'::date);
+VALUES (3, 2, 3, 'Looked too real for a decoration.',  '2019-07-07'::date);
 
 INSERT INTO item_review (iid, reviewer_id, rating, comments, review_date)
-VALUES (1, 2, 3.6, 'No 4k support',  '2019-08-07'::date);
+VALUES (1, 2, 4, 'No 4k support',  '2019-08-07'::date);
 
 INSERT INTO lender_review (lid, reviewer_id, rating, comments, review_date)
-VALUES (1, 2, 4.7, 'Super friendly lender',  '2019-08-07'::date);
+VALUES (1, 2, 5, 'Super friendly lender',  '2019-08-07'::date);
