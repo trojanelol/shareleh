@@ -204,7 +204,6 @@ FOR EACH ROW
 EXECUTE PROCEDURE trig_follow_user_func();
 
 -- Add an item to wishlist trigger
-
 CREATE OR REPLACE FUNCTION trig_add_to_wishlist_func()
 RETURNS TRIGGER AS $$
 BEGIN
