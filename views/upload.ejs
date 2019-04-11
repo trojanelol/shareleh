@@ -63,14 +63,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="contact agileits">
 				<div class="contact-agileinfo">
 					<div class="contact-form wthree">
-						<form action="#" method="post">
+						<form action="/api/upload" method="post" target="dashboard">
 							<div class="">
-								<input type="text" name="title" placeholder="Title" required="">
+								<input type="hidden" name="uid" value= <%= user.uid %> />
+								<input type="text" name="name" placeholder="Title" required="">
 							</div>
 							<div class="">
-								<input list= "category" type="text" name="category" placeholder="Category" required="" selectBoxOptions="Books:Clothings">
+								<input list= "category" type="text" name="cname" placeholder="Category" required="" selectBoxOptions="Books:Clothings">
 								<datalist id="category">
-									<option data-value="">All Categories</option>
 				          <option data-value="books">Books</option>
 				          <option data-value="clothings">Clothings</option>
 				          <option data-value="electronics">Electronics</option>
@@ -86,34 +86,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   							</datalist>
 							</div>
 							<div class="">
-								<input type="number" name="minimumbid" placeholder="Minimum Bidding Amount" required="">
+								<input type="number" name="price" placeholder="Minimum Bidding Amount" required="">
 							</div>
 							<div class="">
-								<textarea placeholder="Description" name="description" required=""></textarea>
+								<textarea placeholder="Description" name="description"></textarea>
 							</div>
 							<div class="">
-								<input list="location" type="text" name="location" placeholder="Location" required="">
+								<input list="location" type="text" name="location" placeholder="Location">
 								<datalist id="location">
-									<option value="Anywhere">
-									<option value="Central Singapore">
-									<option value="North Singapore">
-									<option value="South Singapore">
-									<option value="East Singapore">
-									<option value="West Singapore">
+									<option data-value="" value="Anywhere">
+									<option data-value="central" value="Central Singapore">
+									<option data-value="north" value="North Singapore">
+									<option data-value="south" value="South Singapore">
+									<option data-value="east" value="East Singapore">
+									<option data-value="west" value="West Singapore">
 								</datalist>
 							</div>
 							<div class="">
-								<input list="bidder" type="text" name="bidder" placeholder="Bidder Preference" required="">
+								<input type="text" name="start_date" placeholder="Start date: DD/MM/YYYY">
+							</div>
+							<div class="">
+								<input type="text" name="end_date" placeholder="End date: DD/MM/YYYY">
+							</div>
+							<div class="">
+								<input list="bidder" type="text" name="bidder_preference" placeholder="Bidder Preference" required="">
 								<datalist id="bidder">
-									<option value="Manual check">
-									<option value="First come first served">
-									<option value="Most reliable bidder">
-									<option value="Highest bid">
+									<option data-value="manual" value="Manual check">
+									<option data-value="first-bidder" value="First come first served">
+									<option data-value="reliable-bidder" value="Most reliable bidder">
+									<option data-value="highest-price" value="Highest bid">
 								</datalist>
 							</div>
-							<div class="">
+							<!-- <div class="">
 								<input type="file" name="pic" accept="image/*">
-							</div>
+							</div> -->
 							<input type="submit" value="Submit">
 						</form>
 					</div>
