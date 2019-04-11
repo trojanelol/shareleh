@@ -92,27 +92,33 @@ function getBidderInfo (req, res, itemInfo, itemID) {
             }
 
             var userBidInfo = data.rows[0];
-            var bidStatus = ""
-            if(!userBidInfo) {
-                console.log(data)
-                return res.status(500).json({
-                    success: false,
-                    message: "Error getting bidder info",
-                    data: null
-                })
-            }
-            if (userBidInfo.winning_bid_id === null) {
-                bidStatus = "Ongoing";
-            } else if (userBidInfo.winning_bid_id === userBidInfo.bid) {
-                bidStatus = "Accepted";
-            } else if (userBidInfo.winning_bid_id !== userBidInfo.bid){
-                bidStatus = "Rejected";
-            }
+            var bidStatus = "";
+            var bidPrice;
 
+            if ((data.rows).length !== 1) {
+                bidStatus = null;
+                bidPrice = null;
+            } else {
+                if (!userBidInfo) {
+                    console.log(data.rows)
+                    return res.status(500).json({
+                        success: false,
+                        message: "Error getting bidder info",
+                        data: null
+                    })
+                }
+                if (userBidInfo.winning_bid_id === null) {
+                    bidStatus = "Ongoing";
+                } else if (userBidInfo.winning_bid_id === userBidInfo.bid) {
+                    bidStatus = "Accepted";
+                } else if (userBidInfo.winning_bid_id !== userBidInfo.bid) {
+                    bidStatus = "Rejected";
+                }
+            }
             var itemPage = {
                 item_info: itemInfo,
                 bidding_info: {
-                    previous_bidding_amount: userBidInfo.bid_price,
+                    previous_bidding_amount: bidPrice,
                     bidding_status: bidStatus
                 }
             };
