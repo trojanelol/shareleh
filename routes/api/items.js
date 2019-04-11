@@ -18,8 +18,6 @@ router.get('/', function(req, res, next) {
             data: null
         })
     }
-    var item_id = [];
-    item_id.push(parseInt(itemID));
 
     db.query(`WITH specific_item AS (SELECT * FROM items WHERE iid = $1),
         item_calc_rating AS (SELECT iid, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS item_rating FROM item_review GROUP BY iid),
@@ -27,7 +25,7 @@ router.get('/', function(req, res, next) {
         item_user AS (SELECT item_rating.*, users.username as lender_username FROM item_rating JOIN users ON item_rating.lender_id = users.uid), 
         user_calc_rating AS (SELECT lender_id, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS lender_rating FROM lender_review GROUP BY lender_id)
         SELECT * FROM item_user LEFT JOIN user_calc_rating USING (lender_id)`,
-        item_id,
+        [itemID],
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
@@ -38,18 +36,18 @@ router.get('/', function(req, res, next) {
                 })
             }
 
-            getItemReviews(req, res, data.rows[0], item_id);
+            getItemReviews(req, res, data.rows[0], itemID);
 
         }
     );
 
 });
 
-function getItemReviews (req, res, itemInfo, item_id) {
+function getItemReviews (req, res, itemInfo, itemID) {
 
     db.query(`WITH review AS (SELECT item_review.reviewer_id, item_review.rating, item_review.comments FROM items JOIN item_review USING (iid)WHERE iid = $1) 
         SELECT users.username, review.rating, review.comments FROM review JOIN users ON users.uid = review.reviewer_id`,
-        item_id,
+        [itemID],
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
@@ -61,13 +59,13 @@ function getItemReviews (req, res, itemInfo, item_id) {
             }
 
             Object.assign(itemInfo, {item_reviews: data.rows});
-            getBidderInfo(req, res, itemInfo, item_id);
+            getBidderInfo(req, res, itemInfo, itemID);
         }
     );
 
 }
 
-function getBidderInfo (req, res, itemInfo, item_id) {
+function getBidderInfo (req, res, itemInfo, itemID) {
 
     if (!req.user) {
         return res.status(400).json({
@@ -81,8 +79,8 @@ function getBidderInfo (req, res, itemInfo, item_id) {
 
     // console.log("borrowerID:" + borrowerID);
 
-    db.query(`SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower_id = $1 ORDER BY bid_date DESC LIMIT 1`,
-        [borrowerID],
+    db.query(`SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower_id = $1 AND iid = $2 ORDER BY bid_date DESC LIMIT 1`,
+        [borrowerID, itemID],
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
@@ -94,38 +92,52 @@ function getBidderInfo (req, res, itemInfo, item_id) {
             }
 
             var userBidInfo = data.rows[0];
-            var bidStatus = ""
-            if (userBidInfo.winning_bid_id === null) {
-                bidStatus = "Ongoing";
-            } else if (userBidInfo.winning_bid_id === userBidInfo.bid) {
-                bidStatus = "Accepted";
-            } else if (userBidInfo.winning_bid_id !== userBidInfo.bid){
-                bidStatus = "Rejected";
-            }
+            var bidStatus = "";
+            var bidPrice;
 
+            if ((data.rows).length !== 1) {
+                bidStatus = null;
+                bidPrice = null;
+            } else {
+                if (!userBidInfo) {
+                    console.log(data.rows)
+                    return res.status(500).json({
+                        success: false,
+                        message: "Error getting bidder info",
+                        data: null
+                    })
+                }
+                if (userBidInfo.winning_bid_id === null) {
+                    bidStatus = "Ongoing";
+                } else if (userBidInfo.winning_bid_id === userBidInfo.bid) {
+                    bidStatus = "Accepted";
+                } else if (userBidInfo.winning_bid_id !== userBidInfo.bid) {
+                    bidStatus = "Rejected";
+                }
+            }
             var itemPage = {
                 item_info: itemInfo,
                 bidding_info: {
-                    previous_bidding_amount: userBidInfo.bid_price,
+                    previous_bidding_amount: bidPrice,
                     bidding_status: bidStatus
                 }
             };
 
-            getBids (req, res, itemPage, item_id);
+            getBids (req, res, itemPage, itemID);
         }
     );
 
 
 }
 
-function getBids (req, res, itemPage, item_id) {
+function getBids (req, res, itemPage, itemID) {
 
     db.query(`
     WITH current_round AS (SELECT * FROM rounds WHERE iid = $1 ORDER BY rid DESC LIMIT 1),
     calc_avg AS (SELECT borrower_id, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS rating FROM borrower_review GROUP BY borrower_id),
     bids_with_ratings AS (SELECT * FROM bids LEFT JOIN calc_avg USING (borrower_id))
     SELECT * FROM current_round JOIN bids_with_ratings USING (rid);`,
-        item_id,
+        [itemID],
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
