@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   request(browseURL, function (error, response, body) {
       if (!error) {
           let data = JSON.parse(body) // Print the google web page.
-          res.render('index', {Title: "Main Page", data: data});
+          res.render('index', {Title: "Main Page", items: data});
       }
 
   })

@@ -133,14 +133,7 @@ Author: Jane
 					<!-- //second section (nuts special) -->
 					<!-- third section (oils) -->
 					<div class="contact-form wthree">
-						<% for(var i=0; i < data.length; i++) { %>
-							<tr>
-								<td><%= data[i].iid %> </td>
-								<td><%= data[i].name %> </td>
-								<td><%= data[i].price %> </td>
-								<td><%= data[i].location %> </td>
-							</tr>
-						<% } %>
+						<%- include zzitems.ejs %>
 					</div>
 					<div class="product-sec1">
 						<h3 class="heading-tittle">Oils</h3>
