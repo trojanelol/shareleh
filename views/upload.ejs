@@ -63,13 +63,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="contact agileits">
 				<div class="contact-agileinfo">
 					<div class="contact-form wthree">
-						<form action="/zzupload" method="post">
+						<form action="/api/upload" method="post" target="dashboard">
 							<div class="">
 								<input type="hidden" name="uid" value= <%= user.uid %> />
-								<input type="text" name="title" placeholder="Title" required="">
+								<input type="text" name="name" placeholder="Title" required="">
 							</div>
 							<div class="">
-								<input list= "category" type="text" name="category" placeholder="Category" required="" selectBoxOptions="Books:Clothings">
+								<input list= "category" type="text" name="cname" placeholder="Category" required="" selectBoxOptions="Books:Clothings">
 								<datalist id="category">
 				          <option data-value="books">Books</option>
 				          <option data-value="clothings">Clothings</option>
@@ -86,7 +86,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   							</datalist>
 							</div>
 							<div class="">
-								<input type="number" name="minimumbid" placeholder="Minimum Bidding Amount" required="">
+								<input type="number" name="price" placeholder="Minimum Bidding Amount" required="">
 							</div>
 							<div class="">
 								<textarea placeholder="Description" name="description"></textarea>
