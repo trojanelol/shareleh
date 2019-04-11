@@ -5,6 +5,7 @@ let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('../../db');
+var request = require('request');
 
 /* GET a specific item. */
 router.get('/', function(req, res, next) {
@@ -39,14 +40,14 @@ router.get('/', function(req, res, next) {
                 })
             }
 
-            getItemReviews(res, data.rows[0], values);
+            getItemReviews(req, res, data.rows[0], values);
 
         }
     );
 
 });
 
-function getItemReviews (res, itemInfo, values) {
+function getItemReviews (req, res, itemInfo, values) {
 
     db.query(`WITH review AS (SELECT item_review.reviewer_id, item_review.rating, item_review.comments FROM items JOIN item_review USING (iid)WHERE iid = $1) 
         SELECT users.username, review.rating, review.comments FROM review JOIN users ON users.uid = review.reviewer_id`,
@@ -62,9 +63,62 @@ function getItemReviews (res, itemInfo, values) {
             }
 
             Object.assign(itemInfo, {item_reviews: data.rows});
-            res.json(itemInfo);
+            getBidderInfo(req, res, itemInfo, values)
+            console.log(itemInfo);
         }
     );
+
+}
+
+function getBidderInfo (req, res, itemInfo, values) {
+
+    if (!req.user) {
+        return res.status(400).json({
+            success: false,
+            message: "Error retrieving borrower ID",
+            data: null
+        })
+    }
+    let borrowerID = req.user.uid;
+
+
+    // console.log("borrowerID:" + borrowerID);
+
+    db.query(`SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower = $1 ORDER BY bid_date DESC LIMIT 1`,
+        [borrowerID],
+        (err, data) => {
+            if (err !== undefined) {
+                console.log(err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error getting item reviews",
+                    data: null
+                })
+            }
+
+            var userBidInfo = data.rows[0];
+            var bidStatus = ""
+            if (userBidInfo.winning_bid_id === null) {
+                bidStatus = "Ongoing";
+            } else if (userBidInfo.winning_bid_id === bid) {
+                bidStatus = "Accepted";
+            } else if (userBidInfo.winning_bid_id !== bid){
+                bidStatus = "Rejected";
+            }
+
+            var itemPage = {
+                item_info: itemInfo,
+                bidding_info: {
+                    previous_bidding_amount: userBidInfo.borrower_price,
+                    bidding_status: bidStatus
+                }
+            };
+
+            // console.log(itemPage)
+            res.json(itemPage);
+        }
+    );
+
 
 }
 

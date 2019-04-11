@@ -13,6 +13,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var request = require('request');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 require('dotenv').load();
@@ -264,6 +265,19 @@ app.use('/api/browse', browseApiRouter);
 app.use('/api/items', itemsApiRouter);
 app.use('/api/upload', checkAuthentication, uploadApiRouter);
 
+// zzitems
+app.get('/zzitems', (req, res, next) => {
+  request({
+    url: `http://localhost:${process.env.PORT}/api/browse`,
+    method: 'GET'
+  }, function (error, response, body) {
+    if (!error) {
+      res.render('zzitems', { items: JSON.parse(body)});
+    } else {
+      res.send(`<pre>something went wrong in function: app.get('/zztheirbids', ...)</pre>`);
+    }
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

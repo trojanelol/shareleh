@@ -96,12 +96,12 @@ router.post('/', function(req, res, next) {
                 })
             }
             return !!err
-        }
+        };
 
         client.query('BEGIN', (err) => {
             if (shouldAbort(err)) return;
             client.query(`INSERT INTO items ` + queryColumnText + ` VALUES ` + queryCondText + ` RETURNING iid`, values, (err, data) => {
-                if (shouldAbort(err)) return
+                if (shouldAbort(err)) return;
 
                 console.log("data row");
                 console.log(data.rows);
