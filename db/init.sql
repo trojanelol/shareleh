@@ -88,7 +88,8 @@ ALTER TABLE bids ADD CONSTRAINT bids_rid_fkey FOREIGN KEY (rid) REFERENCES round
 CREATE TABLE user_following (
     follower_id     INTEGER REFERENCES users (uid),
     following_id    INTEGER REFERENCES users (uid),
-    PRIMARY KEY (follower_id, following_id)
+    PRIMARY KEY (follower_id, following_id),
+	CHECK (follower_id <> following_id)
 );
 
 CREATE TABLE item_review (

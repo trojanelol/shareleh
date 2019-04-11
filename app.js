@@ -234,6 +234,7 @@ var browseApiRouter = require('./routes/api/browse');
 var itemsApiRouter = require('./routes/api/items');
 var uploadApiRouter = require('./routes/api/upload');
 var returnApiRouter = require('./routes/api/return');
+var followApiRouter = require('./routes/api/follow');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -266,6 +267,7 @@ app.use('/api/browse', browseApiRouter);
 app.use('/api/items', itemsApiRouter);
 app.use('/api/upload', checkAuthentication, uploadApiRouter);
 app.use('/api/return', checkAuthentication, returnApiRouter);
+app.use('/api/follow', checkAuthentication, followApiRouter);
 
 // zzitems
 app.get('/zzitems', (req, res, next) => {
