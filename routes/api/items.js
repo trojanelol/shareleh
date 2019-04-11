@@ -80,8 +80,8 @@ function getBidderInfo (req, res, itemInfo, itemID) {
     // console.log("borrowerID:" + borrowerID);
 
     db.query(`SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower_id = $1 AND iid = $2 ORDER BY bid_date DESC LIMIT 1`,
-        [borrowerID, itemID],
-        (err, data) => {
+            [borrowerID, itemID],
+            (err, data) => {
             if (err !== undefined) {
                 console.log(err);
                 return res.status(500).json({
