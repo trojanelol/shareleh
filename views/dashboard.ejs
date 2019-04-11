@@ -100,12 +100,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				    				<th>Item</th>
 				    				<th>Return Date</th>
 										<th>Borrower</th>
+										<th>Receive</th>
 				  			</tr>
 								<% for(var i=0; i < listings.length; i++) { %>
 				   				<tr>
 				     				<td><%= listings[i].item %> </td>
 										<td><%= listings[i].return_date %> </td>
 										<td><%= listings[i].borrower %> </td>
+										<td><form action="#"><input type="submit" value="Receive"/></form></td>
 				   				</tr>
 								<% } %>
 								</table>
