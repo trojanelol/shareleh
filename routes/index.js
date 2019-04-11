@@ -2,11 +2,15 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var request = require('request');
+const querystring = require('querystring');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
-  browseURL ="http://localhost:3000/api/browse";
+  if (querystring.stringify(req.query) != ''){
+    browseURL ="http://localhost:3000/api/browse/?" + querystring.stringify(req.query);
+  }else{
+    browseURL ="http://localhost:3000/api/browse/"
+  }
 
   request(browseURL, function (error, response, body) {
       if (!error) {
