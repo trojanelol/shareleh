@@ -9,10 +9,6 @@ const db = require('../../db');
 /* POST Upload an item. */
 router.post('/', function(req, res, next) {
 
-    var columns = [];
-    var cond = [];
-    var values = [];
-
     //Compulsory parameter
     let itemID = req.body.iid;
     if (itemID === undefined) {
@@ -41,20 +37,40 @@ router.post('/', function(req, res, next) {
         };
 
         client.query('BEGIN', (err) => {
-            if (shouldAbort(err)) return;
+            if (shouldAbort(err)) {
+                console.log("error 1");
+                console.log(err)
+                return res.status(500).json({
+                    success: false,
+                    message: "Error beginning item return transaction",
+                    data: null
+                });
+            }
             client.query(`INSERT INTO rounds (iid) VALUES ($1) RETURNING rid`, [itemID], (err, data) => {
-                if (shouldAbort(err)) return;
+                if (shouldAbort(err)) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "Error inserting new round item return",
+                        data: null
+                    });
+                }
                 const roundID = data.rows[0].rid;
 
-                client.query(`UPDATE items (current_round, available) VALUES ($1, $2)`, [itemID, roundID], (err, data) => {
-                    if (shouldAbort(err)) return;
+                client.query(`UPDATE items SET current_round = $1, available = $2 WHERE iid = $3`, [roundID, true, itemID], (err, data) => {
+                    if (shouldAbort(err)) {
+                        return res.status(500).json({
+                            success: false,
+                            message: "Error updating round item return",
+                            data: null
+                        });
+                    }
 
                     client.query('COMMIT', (err) => {
                         if (err) {
                             console.error('Error committing transaction', err.stack)
                             return res.status(500).json({
                                 success: false,
-                                message: "Error committing item upload transaction",
+                                message: "Error committing item return transaction",
                                 data: null
                             })
                         }
@@ -67,7 +83,10 @@ router.post('/', function(req, res, next) {
                         })
                     })
                 })
+
             })
         })
     }) //End of transaction
-}
+})
+
+module.exports = router;
