@@ -22,7 +22,7 @@ router.post('/', function(req, res, next) {
             data: null
         })
     }
-    columns.push("lid");
+    columns.push("lender_id");
     cond.push("$" + (cond.length+1));
     values.push(lenderID);
 
@@ -37,6 +37,15 @@ router.post('/', function(req, res, next) {
     columns.push("name");
     cond.push("$" + (cond.length+1));
     values.push(name);
+
+    let cname = req.body.cname;
+    if (cname === undefined) {
+        return res.status(400).json({
+            success: false,
+            message: "Error getting item category name",
+            data: null
+        })
+    }
 
     //Optional parameters
     let price = req.body.price;
@@ -66,9 +75,6 @@ router.post('/', function(req, res, next) {
         cond.push("to_date($" + (cond.length+1) + ", 'MM/DD/YYYY')");
         values.push(startDate);
     }
-
-    console.log(startDate);
-    console.log("to_date($" + (cond.length+1) + ", 'MM/DD/YYYY')");
 
     let endDate = req.body.end_date;
     if (endDate !== undefined) {
@@ -103,30 +109,31 @@ router.post('/', function(req, res, next) {
             client.query(`INSERT INTO items ` + queryColumnText + ` VALUES ` + queryCondText + ` RETURNING iid`, values, (err, data) => {
                 if (shouldAbort(err)) return;
 
-                console.log("data row");
-                console.log(data.rows);
-
-                client.query(`INSERT INTO rounds (iid) VALUES ($1) RETURNING rid `, [data.rows[0].iid], (err, data) => {
+                client.query(`INSERT INTO item_categories (iid, cname) VALUES ($1, $2) RETURNING iid`, [data.rows[0].iid, cname], (err, data) => {
                     if (shouldAbort(err)) return;
 
-                    client.query(`UPDATE items SET current_round = $1 `, [data.rows[0].rid], (err, data) => {
+                    client.query(`INSERT INTO rounds (iid) VALUES ($1) RETURNING rid `, [data.rows[0].iid], (err, data) => {
                         if (shouldAbort(err)) return;
 
-                        client.query('COMMIT', (err) => {
-                            if (err) {
-                                console.error('Error committing transaction', err.stack)
-                                return res.status(500).json({
-                                    success: false,
-                                    message: "Error committing item upload transaction",
+                        client.query(`UPDATE items SET current_round = $1 `, [data.rows[0].rid], (err, data) => {
+                            if (shouldAbort(err)) return;
+
+                            client.query('COMMIT', (err) => {
+                                if (err) {
+                                    console.error('Error committing transaction', err.stack)
+                                    return res.status(500).json({
+                                        success: false,
+                                        message: "Error committing item upload transaction",
+                                        data: null
+                                    })
+                                }
+                                done();
+
+                                return res.json({
+                                    success: true,
+                                    message: "Item uploaded",
                                     data: null
                                 })
-                            }
-                            done();
-
-                            return res.json({
-                                success: true,
-                                message: "Item uploaded",
-                                data: null
                             })
                         })
                     })
