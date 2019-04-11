@@ -118,20 +118,20 @@ INSERT INTO lender_review (lid, reviewer_id, rating, comments, review_date)
 VALUES (1, 2, 5, 'Super friendly lender',  '2019-08-07'::date);
 
 -- Bids
-INSERT INTO public.bids (rid, borrower, borrower_price, borrower_comments, return_date, bid_date)
+INSERT INTO bids (rid, brid, bid_price, bid_comments, return_date, bid_date)
 VALUES (1,5,5.00,'I want to try overcooked.','2019-07-07','2019-06-13 00:00:00.000');
 
-INSERT INTO public.bids (rid,borrower,borrower_price,borrower_comments,bid_date)
+INSERT INTO bids (rid,brid,bid_price,bid_comments,bid_date)
 VALUES (1,3,2.00,'I need a bluray player.','2019-06-16 00:00:00.000');
 
 UPDATE rounds SET winning_bid_id = 1 WHERE rid = 1;
 
 INSERT INTO rounds (iid) VALUES (1);
 
-INSERT INTO public.bids (rid,borrower,borrower_price,borrower_comments,bid_date)
+INSERT INTO bids (rid,brid,bid_price,bid_comments,bid_date)
 VALUES (11,5,5.00,'Overcooked 2. Lend me again please','2019-07-13 00:00:00.000');
 
-INSERT INTO public.bids (rid,borrower,borrower_price,borrower_comments,bid_date)
+INSERT INTO bids (rid,brid,bid_price,bid_comments,bid_date)
 VALUES (11,3,2.00,'I still really want to watch that bluray movie.','2019-07-16 00:00:00.000');
 
 --remove item upload trigger

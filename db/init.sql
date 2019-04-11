@@ -72,9 +72,9 @@ CREATE TABLE rounds (
 CREATE TABLE bids (
     bid                  SERIAL,
     rid                  INTEGER, -- REFERENCES rounds (rid)
-    borrower             INTEGER REFERENCES users (uid),
-    borrower_price       NUMERIC(15,2) NOT NULL DEFAULT 0,
-    borrower_comments    TEXT,
+    brid                 INTEGER REFERENCES users (uid),
+    bid_price            NUMERIC(15,2) NOT NULL DEFAULT 0,
+    bid_comments         TEXT,
     return_date          DATE,
     bid_date             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (bid)
