@@ -228,7 +228,6 @@ AFTER INSERT ON wishlist
 FOR EACH ROW
 EXECUTE PROCEDURE trig_add_to_wishlist_func();
 
-/*
 -- Trigger 1: Borrower banned from bidding if his/her rating is 0 < rating < 2
 CREATE OR REPLACE FUNCTION trig_borrower_bid_ban()
 RETURNS TRIGGER AS
@@ -247,4 +246,3 @@ CREATE TRIGGER trig_borrower_bid_ban
 BEFORE INSERT ON borrower_review
 FOR EACH ROW
 EXECUTE PROCEDURE trig_borrower_bid_ban();
-*/
