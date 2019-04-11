@@ -1,4 +1,4 @@
--- helper function that drops all tables in the current database (commented out for safety)
+﻿-- helper function that drops all tables in the current database (commented out for safety)
 -- DO $$ DECLARE
 --   r RECORD;
 -- BEGIN
@@ -52,7 +52,7 @@ CREATE TABLE items (
     iid            SERIAL,
     current_round  INTEGER, -- REFERENCES rounds (rid)
     name           CITEXT    NOT NULL,
-    lid            INTEGER NOT NULL REFERENCES users (uid),
+    lender_id      INTEGER NOT NULL REFERENCES users (uid),
     price          NUMERIC(15,2) NOT NULL DEFAULT 0,
     description    TEXT,
     location       CITEXT,
@@ -72,7 +72,7 @@ CREATE TABLE rounds (
 CREATE TABLE bids (
     bid                  SERIAL,
     rid                  INTEGER, -- REFERENCES rounds (rid)
-    brid                 INTEGER REFERENCES users (uid),
+    borrower_id          INTEGER REFERENCES users (uid),
     bid_price            NUMERIC(15,2) NOT NULL DEFAULT 0,
     bid_comments         TEXT,
     return_date          DATE,
@@ -103,7 +103,7 @@ CREATE TABLE item_review (
 
 CREATE TABLE borrower_review (
     brid           SERIAL,
-    bid            INTEGER REFERENCES users (uid),
+    borrower_id    INTEGER REFERENCES users (uid),
     reviewer_id    INTEGER REFERENCES users (uid),
     rating         INTEGER NOT NULL,
     comments       TEXT,
@@ -113,7 +113,7 @@ CREATE TABLE borrower_review (
 
 CREATE TABLE lender_review (
     lrid           SERIAL,
-    lid            INTEGER REFERENCES users (uid),
+    lender_id      INTEGER REFERENCES users (uid),
     reviewer_id    INTEGER REFERENCES users (uid),
     rating         INTEGER NOT NULL,
     comments       TEXT,
@@ -171,8 +171,8 @@ CREATE OR REPLACE FUNCTION trig_upload_item_func()
 RETURNS TRIGGER AS $$
 BEGIN
 
-	IF NOT EXISTS (SELECT * FROM user_tasks WHERE user_tasks.uid = NEW.lid AND user_tasks.task_name = 'UPLOAD_ITEM') THEN
-		INSERT INTO user_tasks (task_name, uid) VALUES ('UPLOAD_ITEM', NEW.lid);
+	IF NOT EXISTS (SELECT * FROM user_tasks WHERE user_tasks.uid = NEW.lender_id AND user_tasks.task_name = 'UPLOAD_ITEM') THEN
+		INSERT INTO user_tasks (task_name, uid) VALUES ('UPLOAD_ITEM', NEW.lender_id);
 	END IF;
 
 	RETURN NEW;
