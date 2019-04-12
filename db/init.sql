@@ -230,23 +230,29 @@ FOR EACH ROW
 EXECUTE PROCEDURE trig_add_to_wishlist_func();
 
 -- Trigger 1: Borrower banned from bidding if his/her rating is 0 < rating < 2
--- CREATE OR REPLACE FUNCTION trig_borrower_bid_ban_func()
--- RETURNS TRIGGER AS
--- $$
---     BEGIN
---         IF AVG(rating) > 0 AND AVG(rating) < 2 THEN
---         	RAISE NOTICE 'You have a cumulative rating score that is lower than 2. You are banned from bidding.';
---         RETURN NULL;
---     END;
--- $$
--- LANGUAGE plpgsql;
---
--- DROP TRIGGER IF EXISTS trig_borrower_bid_ban;
---
--- CREATE TRIGGER trig_borrower_bid_ban
--- BEFORE INSERT ON borrower_review
--- FOR EACH ROW
--- EXECUTE PROCEDURE trig_borrower_bid_ban();
+CREATE OR REPLACE FUNCTION trig_borrower_ban_func()
+RETURNS TRIGGER AS $$
+DECLARE
+	borrower_rating integer;
+BEGIN
+	SELECT calc_rating.rating into borrower_rating from (SELECT borrower_id, CASE WHEN (AVG(rating)- FLOOR(AVG(rating))) >= 0.5 THEN CEIL(AVG(rating)) ELSE FLOOR(AVG(rating)) END AS rating FROM borrower_review GROUP BY borrower_id) AS calc_rating
+	where borrower_id = NEW.borrower_id;
+	
+	IF borrower_rating < 2 THEN 
+		RAISE EXCEPTION 'Borrower rating is too low at < 2';
+		RETURN NULL;
+	ELSE
+		RETURN NEW;
+	END IF;
+END
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trig_borrower_ban ON bids;
+
+CREATE TRIGGER trig_borrower_ban
+BEFORE INSERT ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE trig_borrower_ban_func();
 
 -- Trigger 2: User cannot add their own items to their wishlist
 CREATE OR REPLACE FUNCTION trig_wishlist_fav_own_item_func()
