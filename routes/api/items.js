@@ -67,17 +67,17 @@ function getItemReviews (req, res, itemInfo, itemID) {
 
 function getBidderInfo (req, res, itemInfo, itemID) {
 
-    if (!req.user) {
+
+    let borrowerID = req.query.uid;
+    if (borrowerID === undefined) {
         return res.status(400).json({
             success: false,
             message: "Error retrieving borrower ID",
             data: null
         })
     }
-    let borrowerID = req.user.uid;
 
-
-    // console.log("borrowerID:" + borrowerID);
+    // console.log("borrowerID:" + borrowerID))
 
     db.query(`SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower_id = $1 AND iid = $2 ORDER BY bid_date DESC LIMIT 1`,
             [borrowerID, itemID],
