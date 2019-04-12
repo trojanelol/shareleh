@@ -126,7 +126,7 @@
 													<% }else{%>
 														<p>Bidding Status: <b>No Bidding Yet</b><br></p>
 													<% } %>
-													<form action="/single" method="post">
+													<form action="/postbid" method="post">
 														<div class="">Return date:
 															<input type="date" name="return_date" placeholder="Your Return Date" required="">
 															<p></p>
@@ -148,7 +148,7 @@
 													</form>
  													<% } else{ %>
 														<% if(item.bidding_info.bids != ''){ %>
-															<form action="index" method="get">
+															<form action="/choosebid" method="post">
 																<h3>Bidders</h3>
 																<table>
 																	<tr>
@@ -162,6 +162,7 @@
 																<% for(var i=0; i < item.bidding_info.bids.length; i++) { %>
 												   				<tr>
 																		<td><label><input type="radio" name="bid" value=<%= item.bidding_info.bids[i].bid %>><%= item.bidding_info.bids[i].borrower_id %></label></td>
+                                    <input type="hidden" name="iid" value=<%= iid %> />
 																		<td><%= item.bidding_info.bids[i].bid_date %> </td>
 																		<td><%= item.bidding_info.bids[i].rating %> </td>
 																		<td><%= item.bidding_info.bids[i].bid_price %> </td>
