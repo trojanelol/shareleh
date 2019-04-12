@@ -143,7 +143,7 @@
 													</form>
  													<% } else{ %>
 														<% if(item.bidding_info.bids != ''){ %>
-															<form action="#" method="post">
+															<form action="index" method="get">
 																<h3>Bidders</h3>
 																<table>
 																	<tr>
@@ -151,18 +151,22 @@
 																		<th>Timestamp</th>
 																		<th>Rating</th>
 																		<th>Bid Price</th>
+																		<th>Return Date</th>
 																		<th>Description</th>
 												  			</tr>
 																<% for(var i=0; i < item.bidding_info.bids.length; i++) { %>
 												   				<tr>
-																		<td><label><input type="radio" name="bidder" id=<%= bidders[i].borrower_username %>><%= bidders[i].borrower_username %></label></td>
+																		<td><label><input type="radio" name="bid" value=<%= item.bidding_info.bids[i].bid %>><%= item.bidding_info.bids[i].borrower_id %></label></td>
 																		<td><%= item.bidding_info.bids[i].bid_date %> </td>
 																		<td><%= item.bidding_info.bids[i].rating %> </td>
 																		<td><%= item.bidding_info.bids[i].bid_price %> </td>
+																		<td><%= item.bidding_info.bids[i].return_date %> </td>
 																		<td><%= item.bidding_info.bids[i].bid_comments %> </td>
 												   				</tr>
 																<% } %>
 																</table>
+																<input type="hidden" name="rid" value=<%= item.item_info.current_round %> />
+																<input type="submit" value="Select Bidder">
 															</form>
 														<% } else { %>
 															<h3>No Bidders Yet</h3>
@@ -173,6 +177,7 @@
 										<div class="clearfix"> </div>
 									</div>
 								</div>
+								<p><br></p>
 								<div class="contact-form wthree">
 									<% if(item.item_info.item_reviews != ''){ %>
 									<h3>Item Review</h3>
