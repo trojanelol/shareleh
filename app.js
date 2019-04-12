@@ -237,6 +237,7 @@ var uploadApiRouter = require('./routes/api/upload');
 var returnApiRouter = require('./routes/api/return');
 var followApiRouter = require('./routes/api/follow');
 var wishlistApiRouter = require('./routes/api/wishlist');
+var dashboardApiRouter = require('./routes/api/dashboard');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -271,6 +272,7 @@ app.use('/api/upload', checkAuthentication, uploadApiRouter);
 app.use('/api/return', checkAuthentication, returnApiRouter);
 app.use('/api/follow', checkAuthentication, followApiRouter);
 app.use('/api/wishlist', checkAuthentication, wishlistApiRouter);
+app.use('/api/dashboard', checkAuthentication, dashboardApiRouter);
 
 app.get('/zzbrowse', (req, res, next) => {
   request({
