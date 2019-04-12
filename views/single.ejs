@@ -123,13 +123,19 @@
 													<% }else{%>
 														<p>Bidding Status: <b>No Bidding Yet</b><br></p>
 													<% } %>
-													<form action="#" method="post">
-														<div class="">
-															<input type="number" name="bid" placeholder="Your Bidding Amount" required="">
+													<form action="/index" method="get">
+														<div class="">Return date:
+															<input type="date" name="return_date" placeholder="Your Return Date" required="">
+															<p></p>
 														</div>
 														<div class="">
-															<textarea placeholder="Description" name="description" required=""></textarea>
+															<input type="number" name="borrower_price" placeholder="Your Bidding Amount" required="">
 														</div>
+														<div class="">
+															<textarea placeholder="Description" name="borrower_comments" required=""></textarea>
+														</div>
+														<input type="hidden" name="rid" value=<%= item.item_info.current_round %> />
+														<input type="hidden" name="uid" value=<%= user.uid %> />
 														<input type="submit" value="Bid">
 														<div class="">
 															<p></p>
