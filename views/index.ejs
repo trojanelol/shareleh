@@ -142,9 +142,15 @@ Author: Jane
 									<div class="men-thumb-item">
 										<img src="images/mk5.png" alt="">
 										<div class="men-cart-pro">
+											<%if (user) { %>
 											<div class="inner-men-cart-pro">
-												<a href="single" class="link-product-add-cart">Wishlist</a>
+												<form action="/api/wishlist" method="get">
+												<input type="submit" class="link-product-add-cart" value = "Wishlist"/>
+												<input type="hidden" name="iid" value=<%= items[i]['iid'] %> />
+												<input type="hidden" name="uid" value=<%= user.uid %> />
+												</form>
 											</div>
+											<%}%>
 										</div>
 										<%if (items[i]['available'] == true) { %>
 											<span class="product-new-top"><i class="fa fa-check"></i></span>

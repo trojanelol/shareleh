@@ -42,12 +42,15 @@ router.get('/', function(req, res, next) {
 
             }
 
+            done();
+
+            return res.redirect('/dashboard')
             //Successful
-            return res.status(200).json({
-                success: true,
-                message: "Successfully added item to wishlist",
-                data: null
-            });
+            // return res.status(200).json({
+            //     success: true,
+            //     message: "Successfully added item to wishlist",
+            //     data: null
+            // });
 
 
         }
