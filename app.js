@@ -239,7 +239,7 @@ var followApiRouter = require('./routes/api/follow');
 var wishlistApiRouter = require('./routes/api/wishlist');
 var dashboardApiRouter = require('./routes/api/dashboard');
 
-app.post('/single', function(req, res, next) {
+app.post('/postbid', function(req, res, next) {
   // res.json(JSON.decycle(req.body)) // For debugging, uncomment this to inspect req
   var rid = (req.body['rid'] instanceof Array) ? Math.max.apply(null, req.body['rid']) : req.body['rid'];
   var borrower_id = req.body['uid'];
@@ -260,6 +260,34 @@ app.post('/single', function(req, res, next) {
       }
     }
   );
+});
+app.post('/choosebid', function(req, res, next) {
+  // res.json(JSON.decycle(req.body)) // For debugging, uncomment this to inspect req
+  var rid = (req.body['rid'] instanceof Array) ? Math.max.apply(null, req.body['rid']) : req.body['rid'];
+  var bid = req.body['bid'];
+  var iid = req.body['iid'];
+  db.query(`UPDATE rounds SET winning_bid_id=$1 where rid=$2`, [bid, rid], (err, data) => {
+    if (!err) {
+      db.query(`INSERT INTO rounds (rid, iid, winning_bid_id)
+      VALUES (default, $1, null) RETURNING rid`, [iid], (err, data) => {
+        if (!err) {
+          var last_inserted_rid = data.rows[0]['rid'];
+          db.query(`UPDATE items SET current_round=$1, 
+            available=FALSE WHERE iid = $2`, [last_inserted_rid, iid], (err, data) => {
+            if (!err) {
+              res.send(`<pre>Successfully chosen winning bid! <a href="javascript:history.go(-1)">Go Back.</a></pre>`);
+            } else {
+              res.json(err.stack);
+            }
+          });
+        } else {
+          res.json(err.stack);
+        }
+      });
+    } else {
+      res.send(err.stack);
+    }
+  });
 });
 
 // view engine setup
@@ -322,40 +350,6 @@ app.get('/zzitems', (req, res, next) => {
       res.send(error);
     }
   });
-});
-app.get('/inbids', (req, res, next) => {
-  var rid = req.query['rid'];
-  var borrower_id = req.query['uid'];
-  var bid_price = req.query['borrower_price'];
-  var bid_comments = req.query['borrower_comments'];
-  var return_date = req.query['return_date'];
-  db.query(`INSERT INTO
-    bids (rid, borrower_id, bid_price, bid_comments, return_date)
-    VALUES ($1, $2, $3, $4, $5)`,
-    [rid, borrower_id, bid_price, bid_comments, return_date],
-    (err, data) => {
-      if (!err) {
-        res.json({ status: "success" });
-      } else {
-        res.json({ status: "failure" });
-      }
-    }
-  );
-  // res.json(req.query);
-});
-app.get('/outbids', (req, res, next) => {
-  var rid = req.query['rid'];
-  var bid = req.query['bid'];
-  db.query(`UPDATE rounds SET winning_bid_id=$1 WHERE rid=$2`,
-    [bid, rid],
-    (err, data) => {
-      if (!err) {
-        res.json({ status: "success" });
-      } else {
-        res.json({ status: "failure" });
-      }
-    }
-  );
 });
 
 
