@@ -135,12 +135,12 @@ CREATE TABLE item_categories (
 );
 
 CREATE TABLE tasks (
-	tname          CITEXT PRIMARY KEY,
+	task_name      CITEXT PRIMARY KEY,
 	description    TEXT NOT NULL
 );
 
 CREATE TABLE user_tasks (
-	task_name    CITEXT REFERENCES tasks(tname),
+	task_name    CITEXT REFERENCES tasks(task_name),
 	uid          INTEGER REFERENCES users(uid),
 	PRIMARY KEY(task_name, uid)
 );

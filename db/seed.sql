@@ -45,9 +45,9 @@ VALUES (2);
 
 -- Tasks
 
-INSERT INTO tasks (tname, description) VALUES ('UPLOAD_ITEM', 'Upload an item');
-INSERT INTO tasks (tname, description) VALUES ('FOLLOW_USER','Follow another user');
-INSERT INTO tasks (tname, description) VALUES ('ADD_TO_WISHLIST','Add an item to wishlist');
+INSERT INTO tasks (task_name, description) VALUES ('UPLOAD_ITEM', 'Upload an item');
+INSERT INTO tasks (task_name, description) VALUES ('FOLLOW_USER','Follow another user');
+INSERT INTO tasks (task_name, description) VALUES ('ADD_TO_WISHLIST','Add an item to wishlist');
 
 
 -- Create bidding round when uploading item trigger
@@ -58,7 +58,7 @@ DECLARE
 	round_id integer;
 BEGIN
 	INSERT INTO rounds (iid) VALUES (NEW.iid) RETURNING rid INTO round_id;
-	UPDATE items SET current_round = round_id;
+	UPDATE items SET current_round = round_id WHERE items.iid = NEW.iid;
 	RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
