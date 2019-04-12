@@ -112,7 +112,15 @@ function getListings (req, res, valuesPassed, uid) {
                 listings: data.rows
             };
 
-            return res.json(dashboardInfo)
+            // res.json(dashboardInfo)
+            res.send(`
+            <h1>Your Dashboard</h1>
+            <pre>
+            Your Task Info is : ${JSON.stringify(dashboardInfo.tasks)}<br>
+            Your Listing is : ${JSON.stringify(dashboardInfo.listings)}<br>
+            <a href="/">Return home.</a>
+            </pre>
+            `);
 
         }
     );

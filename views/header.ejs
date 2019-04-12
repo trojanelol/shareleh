@@ -44,7 +44,7 @@
           <a href="secret">Welcome, <%= user.username %></a>
         </li>
         <li>
-          <a href="dashboard">Dashboard</a>
+          <a href="/api/dashboard/?uid=<%= user.uid %>">Dashboard</a>
         </li>
         <li>
           <a href="">Browse</a>

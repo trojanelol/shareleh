@@ -226,7 +226,7 @@ var privacyRouter = require('./routes/privacy');
 var productRouter = require('./routes/product');
 var singleRouter = require('./routes/single');
 var termsRouter = require('./routes/terms');
-var dashboardRouter = require('./routes/dashboard');
+var dashboard2Router = require('./routes/dashboard2');
 var uploadRouter = require('./routes/upload');
 var userRouter = require('./routes/user');
 
@@ -284,7 +284,7 @@ app.use('/privacy', privacyRouter);
 app.use('/product', productRouter);
 app.use('/single', checkAuthentication, singleRouter);
 app.use('/terms', termsRouter);
-app.use('/dashboard', checkAuthentication, dashboardRouter);
+app.use('/dashboard2', checkAuthentication, dashboard2Router);
 app.use('/upload', checkAuthentication, uploadRouter);
 app.use('/user', checkAuthentication, userRouter);
 
