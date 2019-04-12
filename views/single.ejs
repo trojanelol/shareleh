@@ -53,7 +53,7 @@
 	<div class="banner-bootom-w3-agileits">
 		<div class="container">
 			<!-- tittle heading -->
-			<h3 class="tittle-w3l"><%= title %>
+			<h3 class="tittle-w3l"><%= item.item_info.name %>
 				<span class="heading-style">
 					<i></i>
 					<i></i>
@@ -62,42 +62,42 @@
 			</h3>
 			<div class="col-md-5 single-right-left ">
 				<div class="thumb-image">
-					<img src=<%= img %> data-imagezoom="true" class="img-responsive" alt=""> </div>
+					<img src=images/<%= img %> data-imagezoom="true" class="img-responsive" alt=""> </div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="col-md-7 single-right-left simpleCart_shelfItem">
-					<h3><%= description%></h3>
+					<h3><%= item.item_info.description%></h3>
 					<div class="rating1">
 						<span class="starRating">
-							<%if (rating == 5) { %>
+							<%if (item.item_info.item_rating == 5) { %>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<% } %>
-								<%if (rating == 4) { %>
+								<%if (item.item_info.item_rating == 4) { %>
 									<i class="fa fa-star" aria-hidden="true"></i>
 									<i class="fa fa-star" aria-hidden="true"></i>
 									<i class="fa fa-star" aria-hidden="true"></i>
 									<i class="fa fa-star" aria-hidden="true"></i>
 									<i class="fa fa-star-o" aria-hidden="true"></i>
 									<% } %>
-									<%if (rating == 3) { %>
+									<%if (item.item_info.item_rating == 3) { %>
 										<i class="fa fa-star" aria-hidden="true"></i>
 										<i class="fa fa-star" aria-hidden="true"></i>
 										<i class="fa fa-star" aria-hidden="true"></i>
 										<i class="fa fa-star-o" aria-hidden="true"></i>
 										<i class="fa fa-star-o" aria-hidden="true"></i>
 										<% } %>
-										<%if (rating == 2) { %>
+										<%if (item.item_info.item_rating == 2) { %>
 											<i class="fa fa-star" aria-hidden="true"></i>
 											<i class="fa fa-star" aria-hidden="true"></i>
 											<i class="fa fa-star-o" aria-hidden="true"></i>
 											<i class="fa fa-star-o" aria-hidden="true"></i>
 											<i class="fa fa-star-o" aria-hidden="true"></i>
 											<% } %>
-											<%if (rating == 1) { %>
+											<%if (item.item_info.item_rating == 1) { %>
 												<i class="fa fa-star" aria-hidden="true"></i>
 												<i class="fa fa-star-o" aria-hidden="true"></i>
 												<i class="fa fa-star-o" aria-hidden="true"></i>
@@ -107,17 +107,17 @@
 											</span>
 										</div>
 										<p>
-											<span class="item_price">Minimum Bidding: $<%= price %></span><br>
-											<label>Location: <%= location %> Singapore</label><br>
-											Available from <b><%= start_date %></b> to <b><%= end_date %></b><br>
-											Uploaded by <a href="user"><b><%= lender_username %></b></a>
-											(<%= lender_rating %> star lender)
+											<span class="item_price">Minimum Bidding: $<%= item.item_info.price %></span><br>
+											<label>Location: <%= item.item_info.location %> Singapore</label><br>
+											Available from <b><%= item.item_info.start_date %></b> to <b><%= item.item_info.end_date %></b><br>
+											Uploaded by <a href="user"><b><%= item.item_info.lender_username %></b></a>
+											(<%= item.item_info.lender_rating %> star lender)
 										</p>
 										<div class="occasion-cart">
 											<div class="contact agileits">
-												<% if(user.username != lender_username){ %>
-													<p>Bidding Status: <b><%= bidding_status %></b><br>
-													Previous bidding amount: <b>$<%= previous_bidding_amount %></b>
+												<% if(user.username != item.item_info.lender_username){ %>
+													<p>Bidding Status: <b><%= item.bidding_info.bidding_status %></b><br>
+													Previous bidding amount: <b>$<%= item.bidding_info.previous_bidding_amount %></b>
 													<br></p>
 													<form action="#" method="post">
 														<div class="">
@@ -132,6 +132,7 @@
 														</div>
 													</form>
  													<% } else{ %>
+														<% if(item.bidding_info.bids != ''){ %>
 															<form action="#" method="post">
 																<h3>Bidders</h3>
 																<table>
@@ -142,17 +143,20 @@
 																		<th>Bid Price</th>
 																		<th>Description</th>
 												  			</tr>
-																<% for(var i=0; i < bidders.length; i++) { %>
+																<% for(var i=0; i < item.bidding_info.bids.length; i++) { %>
 												   				<tr>
 																		<td><label><input type="radio" name="bidder" id=<%= bidders[i].borrower_username %>><%= bidders[i].borrower_username %></label></td>
-																		<td><%= bidders[i].timestamp %> </td>
-																		<td><%= bidders[i].borrower_rating %> </td>
-																		<td><%= bidders[i].bid_price %> </td>
-																		<td><%= bidders[i].description %> </td>
+																		<td><%= item.bidding_info.bids[i].bid_date %> </td>
+																		<td><%= item.bidding_info.bids[i].rating %> </td>
+																		<td><%= item.bidding_info.bids[i].bid_price %> </td>
+																		<td><%= item.bidding_info.bids[i].bid_comments %> </td>
 												   				</tr>
 																<% } %>
 																</table>
 															</form>
+														<% } else { %>
+															<h3>No Bidders Yet</h3>
+														<% } %>
 												<% } %>
 											</div>
 										</div>
@@ -168,11 +172,11 @@
 					    				<th>Rating</th>
 					    				<th>Comment</th>
 					  			</tr>
-									<% for(var i=0; i < reviews.length; i++) { %>
+									<% for(var i=0; i < item.item_info.item_reviews.length; i++) { %>
 					   				<tr>
-					     				<td><%= reviews[i].reviewee %> </td>
-											<td><%= reviews[i].rating %> </td>
-											<td>"<%= reviews[i].comment %>"</td>
+					     				<td><%= item.item_info.item_reviews[i].username %> </td>
+											<td><%= item.item_info.item_reviews[i].rating %> </td>
+											<td>"<%= item.item_info.item_reviews[i].comments %>"</td>
 					   				</tr>
 									<% } %>
 									</table>
