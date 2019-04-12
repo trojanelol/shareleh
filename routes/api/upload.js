@@ -129,11 +129,13 @@ router.post('/', function(req, res, next) {
                                 }
                                 done();
 
-                                return res.json({
-                                    success: true,
-                                    message: "Item uploaded",
-                                    data: null
-                                })
+                                return res.redirect('/dashboard')
+
+                                // return res.json({
+                                //     success: true,
+                                //     message: "Item uploaded",
+                                //     data: null
+                                // })
                             })
                         })
                     })
