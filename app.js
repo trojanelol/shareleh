@@ -272,8 +272,7 @@ app.use('/api/return', checkAuthentication, returnApiRouter);
 app.use('/api/follow', checkAuthentication, followApiRouter);
 app.use('/api/wishlist', checkAuthentication, wishlistApiRouter);
 
-// zzitems
-app.get('/zzitems', (req, res, next) => {
+app.get('/zzbrowse', (req, res, next) => {
   request({
     url: `http://localhost:${process.env.PORT}/api/browse`,
     method: 'GET'
@@ -281,10 +280,26 @@ app.get('/zzitems', (req, res, next) => {
     if (!error) {
       res.render('zzitems', { items: JSON.parse(body)});
     } else {
-      res.send(`<pre>something went wrong in function: app.get('/zztheirbids', ...)</pre>`);
+      res.send(error);
     }
   });
 });
+app.get('/zzitems', (req, res, next) => {
+  res.json(req.body);
+  request({
+    url: `http://localhost:${process.env.PORT}/api/browse`,
+    body: req.body,
+    method: 'POST'
+  }, function (error, response, body) {
+    if (!error) {
+      res.render('zzitems', { items: JSON.parse(body)});
+    } else {
+      res.send(error);
+    }
+  });
+});
+app.get('/inbids', (req, res, next) => {res.send(`hello`)});
+app.get('/outbids', (req, res, next) => {res.send(`hello`)});
 
 
 // catch 404 and forward to error handler

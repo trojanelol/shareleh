@@ -1,3 +1,103 @@
-<% for (var i=0; i<items.length; i++) { %>
-<p><%= items[i]['name'] %>, $<%= items[i]['price'] %></p>
-<% } %>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<style>
+  body {
+    line-height: 1.6;
+    color: #222;
+    max-width: 50rem;
+    padding: 2rem;
+    margin: auto;
+    background: #fafafa;
+  }
+  .my-custom-scrollbar {
+    position: relative;
+    height: 250px;
+    overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+</style>
+<div class="table-wrapper-scroll-10 my-custom-scrollbar">
+  <table class="table table-bordered table-striped mb-0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i=0; i<items.length; i++) { %>
+      <tr>
+        <td><%= items[i]['name'] %></td>
+        <td><%= items[i]['price'] %></td>
+        <td><%= items[i]['description'] %></td>
+        <td><%= items[i]['location'] %></td>
+        <td><%= items[i]['start_date'] %></td>
+        <td><%= items[i]['end_date'] %></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+<form action="/zzitems" method="get">
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Price Floor</label>
+    <input name="price_floor" type="number" class="form-control" id="exampleFormControlInput1" min="0" step="1" value="0">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Price Ceiling</label>
+    <input name="price_ceiling" type="number" class="form-control" id="exampleFormControlInput1" min="0" step="1" value="999">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Location</label>
+    <select name="location" class="form-control" id="exampleFormControlSelect1">
+      <option value="Anywhere">Anywhere</option>
+      <option value="Central Singapore">Central Singapore</option>
+      <option value="North Singapore">North Singapore</option>
+      <option value="South Singapore">South Singapore</option>
+      <option value="East Singapore">East Singapore</option>
+      <option value="West Singapore">West Singapore</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Category</label>
+    <select name="category" class="form-control" id="exampleFormControlSelect1">
+      <option value="All Categories">All Categories</option>
+      <option value="Books">Books</option>
+      <option value="Clothings">Clothings</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Food &amp; Beverages">Food &amp; Beverages</option>
+      <option value="Furniture">Furniture</option>
+      <option value="Kitchenware">Kitchenware</option>
+      <option value="Party Sets">Party Sets</option>
+      <option value="Tools">Tools</option>
+      <option value="Video Games">Video Games</option>
+      <option value="Vehicles">Vehicles</option>
+      <option value="Vouchers">Vouchers</option>
+      <option value="Others">Others</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Start Date</label>
+    <input name="start_date" type="date" class="form-control" id="exampleFormControlInput1" value="1999-01-01">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">End Date</label>
+    <input name="end_date" type="date" class="form-control" id="exampleFormControlInput1" value="2050-01-01">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Keywords</label>
+    <textarea name="keywords" class="form-control" id="exampleFormControlTextarea1" rows="3">keyword1 keyword2</textarea>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Rating</label>
+    <input name="rating" type="number" class="form-control" id="exampleFormControlInput1" min="0" step="0.1" value="0.0">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
