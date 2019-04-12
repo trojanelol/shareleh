@@ -208,7 +208,7 @@ CREATE OR REPLACE FUNCTION trig_add_to_wishlist_func()
 RETURNS TRIGGER AS $$
 BEGIN
 
-	IF NOT EXISTS (SELECT * FROM user_tasks WHERE user_tasks.uid = NEW.uid AND user_tasks.task_name = 'ADD_TO_WISHLIST') THEN
+	IF (user_tasks.task_name = 'ADD_TO_WISHLIST') THEN
 		INSERT INTO user_tasks (task_name, uid) VALUES ('ADD_TO_WISHLIST', NEW.uid);
 	END IF;
 
@@ -223,3 +223,30 @@ CREATE TRIGGER trig_add_to_wishlist
 AFTER INSERT ON wishlist
 FOR EACH ROW
 EXECUTE PROCEDURE trig_add_to_wishlist_func();
+
+
+
+-- Trigger 1: Borrower banned from bidding if his/her rating is 0 < rating < 2
+-- Business decision: Identify and bar borrowers that have a history of returning loaned 
+-- items in poor condition. If not, people are less likely to loan their items.
+----------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION trig_borrower_bid_ban_func()
+RETURNS TRIGGER AS
+$$
+    BEGIN
+        with borrowers_bids AS (
+            SELECT BR.reviewer_id, BR.rating, B.borrower
+            FROM borrower_review BR NATURAL JOIN bids 
+            GROUP BY BR.reviewer_id
+        ) SELECT * FROM borrowers_bids WHERE AVG(rating) < 2;
+    RETURN NULL;
+    END;
+$$
+LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trig_borrower_bid_ban ON bids;
+
+CREATE TRIGGER trig_borrower_bid_ban
+BEFORE INSERT ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE trig_borrower_bid_ban_func();

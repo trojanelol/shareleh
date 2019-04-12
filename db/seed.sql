@@ -42,6 +42,8 @@ INSERT INTO tasks (tname, description) VALUES ('FOLLOW_USER','Follow another use
 
 INSERT INTO tasks (tname, description) VALUES ('ADD_TO_WISHLIST','Add an item to wishlist');
 
+INSERT INTO tasks (tname, description) VALUES ('BID', 'Bid for an item');
+
 -- Items
 
 INSERT INTO
