@@ -34,21 +34,19 @@ SELECT tasks.*, CASE WHEN uid = 1 THEN TRUE ELSE FALSE END AS progress FROM task
                 })
             }
 
-            console.log(data.rows)
-
-            return res.json(data.rows)
-            // getLoanItems(req, res, data.rows[0], uid);
+            getLoanItems(req, res, data.rows, uid);
 
         }
     );
 
 });
 
-function getLoanItems (req, res, info, uid) {
+function getLoanItems (req, res, tasks, uid) {
 
-    db.query(`WITH rounds_bids AS (SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower_id = 5)
-SELECT * FROM rounds_bids JOIN items USING (iid);`,
-        [itemID],
+    db.query(`WITH rounds_bids AS (SELECT * FROM rounds JOIN bids USING (rid) WHERE borrower_id = $1),
+with_items AS (SELECT * FROM rounds_bids JOIN items USING (iid))
+SELECT * FROM with_items JOIN users ON with_items.lender_id = users.uid`,
+        [uid],
         (err, data) => {
             if (err !== undefined) {
                 console.log(err);
@@ -59,8 +57,63 @@ SELECT * FROM rounds_bids JOIN items USING (iid);`,
                 })
             }
 
-            Object.assign(itemInfo, {item_reviews: data.rows});
-            getBidderInfo(req, res, itemInfo, itemID);
+            //Determine items currently on loan
+            var filtered = (data.rows).filter(function(value, index, arr){
+
+                if (value.rid === value.current_round) {
+                    if (value.bid === value.winning_bid_id) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            var loanItems = []
+            //Format the items on loan
+            filtered.forEach(function(element) {
+                var itemOnLoan = {
+                    item: element.name,
+                    lender: element.username,
+                    return_date: element.return_date
+                };
+                loanItems.push(itemOnLoan)
+            });
+
+
+            var valuesToPass = {
+                tasks: tasks,
+                loan_items: loanItems
+            };
+
+            getListings(req, res, valuesToPass, uid)
+        }
+    );
+
+}
+
+function getListings (req, res, valuesPassed, uid) {
+
+    db.query(`SELECT items.name, items.available FROM items WHERE lender_id = $1`,
+        [uid],
+        (err, data) => {
+            if (err !== undefined) {
+                console.log(err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error getting item reviews",
+                    data: null
+                })
+            }
+
+            //Format for response
+            dashboardInfo = {
+                tasks: valuesPassed.tasks,
+                loan_items: valuesPassed.loan_items,
+                listings: data.rows
+            };
+
+            return res.json(dashboardInfo)
+
         }
     );
 
