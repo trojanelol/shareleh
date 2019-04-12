@@ -160,8 +160,8 @@
                 }
             },
             {
-                "name": "lid",
-                "verbose": "lid",
+                "name": "lender_id",
+                "verbose": "lender_id",
                 "control": {
                     "text": true
                 },
@@ -283,138 +283,6 @@
             "readonly": false
         }
     },
-    "bids": {
-        "slug": "bids",
-        "table": {
-            "name": "bids",
-            "pk": "bid",
-            "verbose": "bids"
-        },
-        "columns": [
-            {
-                "name": "bid",
-                "verbose": "bid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "rid",
-                "verbose": "rid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "borrower",
-                "verbose": "borrower",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "borrower_price",
-                "verbose": "borrower_price",
-                "control": {
-                    "text": true
-                },
-                "type": "decimal(15,2)",
-                "allowNull": false,
-                "defaultValue": "0",
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "borrower_comments",
-                "verbose": "borrower_comments",
-                "control": {
-                    "text": true
-                },
-                "type": "text",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "return_date",
-                "verbose": "return_date",
-                "control": {
-                    "text": true
-                },
-                "type": "date",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "bid_date",
-                "verbose": "bid_date",
-                "control": {
-                    "text": true
-                },
-                "type": "timestamp",
-                "allowNull": true,
-                "defaultValue": "CURRENT_TIMESTAMP",
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
     "rounds": {
         "slug": "rounds",
         "table": {
@@ -483,6 +351,138 @@
             "readonly": false
         }
     },
+    "bids": {
+        "slug": "bids",
+        "table": {
+            "name": "bids",
+            "pk": "bid",
+            "verbose": "bids"
+        },
+        "columns": [
+            {
+                "name": "bid",
+                "verbose": "bid",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "rid",
+                "verbose": "rid",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "borrower_id",
+                "verbose": "borrower_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "bid_price",
+                "verbose": "bid_price",
+                "control": {
+                    "text": true
+                },
+                "type": "decimal(15,2)",
+                "allowNull": false,
+                "defaultValue": "0",
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "bid_comments",
+                "verbose": "bid_comments",
+                "control": {
+                    "text": true
+                },
+                "type": "text",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "return_date",
+                "verbose": "return_date",
+                "control": {
+                    "text": true
+                },
+                "type": "date",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "bid_date",
+                "verbose": "bid_date",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
+                "defaultValue": "CURRENT_TIMESTAMP",
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
     "user_following": {
         "slug": "user_following",
         "table": {
@@ -515,6 +515,122 @@
                 },
                 "type": "integer",
                 "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            }
+        ],
+        "mainview": {
+            "show": true
+        },
+        "listview": {
+            "order": {},
+            "page": 25
+        },
+        "editview": {
+            "readonly": false
+        }
+    },
+    "borrower_review": {
+        "slug": "borrower_review",
+        "table": {
+            "name": "borrower_review",
+            "pk": "brid",
+            "verbose": "borrower_review"
+        },
+        "columns": [
+            {
+                "name": "brid",
+                "verbose": "brid",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "borrower_id",
+                "verbose": "borrower_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "reviewer_id",
+                "verbose": "reviewer_id",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "rating",
+                "verbose": "rating",
+                "control": {
+                    "text": true
+                },
+                "type": "integer",
+                "allowNull": false,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "comments",
+                "verbose": "comments",
+                "control": {
+                    "text": true
+                },
+                "type": "text",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "review_date",
+                "verbose": "review_date",
+                "control": {
+                    "text": true
+                },
+                "type": "timestamp",
+                "allowNull": true,
                 "defaultValue": null,
                 "listview": {
                     "show": true
@@ -651,122 +767,6 @@
             "readonly": false
         }
     },
-    "borrower_review": {
-        "slug": "borrower_review",
-        "table": {
-            "name": "borrower_review",
-            "pk": "brid",
-            "verbose": "borrower_review"
-        },
-        "columns": [
-            {
-                "name": "brid",
-                "verbose": "brid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "bid",
-                "verbose": "bid",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "reviewer_id",
-                "verbose": "reviewer_id",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "rating",
-                "verbose": "rating",
-                "control": {
-                    "text": true
-                },
-                "type": "integer",
-                "allowNull": false,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "comments",
-                "verbose": "comments",
-                "control": {
-                    "text": true
-                },
-                "type": "text",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "review_date",
-                "verbose": "review_date",
-                "control": {
-                    "text": true
-                },
-                "type": "timestamp",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            }
-        ],
-        "mainview": {
-            "show": true
-        },
-        "listview": {
-            "order": {},
-            "page": 25
-        },
-        "editview": {
-            "readonly": false
-        }
-    },
     "lender_review": {
         "slug": "lender_review",
         "table": {
@@ -792,8 +792,8 @@
                 }
             },
             {
-                "name": "lid",
-                "verbose": "lid",
+                "name": "lender_id",
+                "verbose": "lender_id",
                 "control": {
                     "text": true
                 },
@@ -991,13 +991,13 @@
         "slug": "tasks",
         "table": {
             "name": "tasks",
-            "pk": "tname",
+            "pk": "task_name",
             "verbose": "tasks"
         },
         "columns": [
             {
-                "name": "tname",
-                "verbose": "tname",
+                "name": "task_name",
+                "verbose": "task_name",
                 "control": {
                     "text": true
                 },
