@@ -26,13 +26,13 @@ router.get('/', function(req, res, next) {
   request(itemsURL, function (error, response, body) {
     if (!error) {
       let data = JSON.parse(body) // Print the google web page.
-      res.render('single', {item: data, img: "s1.png"});
+      res.render('single', {item: data, img: "s1.png", iid: req.query['iid']});
     }else{
       console.log(itemsURL + req.session.user)
       console.log(error)
     }
 
-  })
+  });
 
   // let data = app.get('/api/browse')
   //

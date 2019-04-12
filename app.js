@@ -239,6 +239,29 @@ var followApiRouter = require('./routes/api/follow');
 var wishlistApiRouter = require('./routes/api/wishlist');
 var dashboardApiRouter = require('./routes/api/dashboard');
 
+app.post('/single', function(req, res, next) {
+  // res.json(JSON.decycle(req.body)) // For debugging, uncomment this to inspect req
+  var rid = (req.body['rid'] instanceof Array) ? Math.max.apply(null, req.body['rid']) : req.body['rid'];
+  var borrower_id = req.body['uid'];
+  var bid_price = req.body['borrower_price'];
+  var bid_comments = req.body['borrower_comments'];
+  var return_date = req.body['return_date'];
+  var iid = req.body['iid'];
+  db.query(`INSERT INTO
+    bids (rid, borrower_id, bid_price, bid_comments, return_date)
+    VALUES ($1, $2, $3, $4, $5)`,
+    [rid, borrower_id, bid_price, bid_comments, return_date],
+    (err, data) => {
+      if (!err) {
+        // res.redirect(`/`);
+        res.send(`<pre>Successfully bidded! <a href="javascript:history.go(-1)">Go Back.</a></pre>`);
+      } else {
+        res.json({ status: "failure" });
+      }
+    }
+  );
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

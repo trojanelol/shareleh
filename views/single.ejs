@@ -16,6 +16,9 @@
 	function hideURLbar() {
 		window.scrollTo(0, 1);
 	}
+	if(performance.navigation.type == 2){
+		location.reload(true);
+	}
 	</script>
 	<!--//tags -->
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
@@ -123,7 +126,7 @@
 													<% }else{%>
 														<p>Bidding Status: <b>No Bidding Yet</b><br></p>
 													<% } %>
-													<form action="/index" method="get">
+													<form action="/single" method="post">
 														<div class="">Return date:
 															<input type="date" name="return_date" placeholder="Your Return Date" required="">
 															<p></p>
@@ -135,7 +138,9 @@
 															<textarea placeholder="Description" name="borrower_comments" required=""></textarea>
 														</div>
 														<input type="hidden" name="rid" value=<%= item.item_info.current_round %> />
+														<input type="hidden" name="rid" value=<%= item.item_info.current_round %> />
 														<input type="hidden" name="uid" value=<%= user.uid %> />
+														<input type="hidden" name="iid" value=<%= iid %> />
 														<input type="submit" value="Bid">
 														<div class="">
 															<p></p>
