@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
   request(itemsURL, function (error, response, body) {
     if (!error) {
       let data = JSON.parse(body) // Print the google web page.
-      res.render('single', {item: data, img: "s1.jpg"});
+      res.render('single', {item: data, img: "s1.png"});
     }else{
       console.log(itemsURL + req.session.user)
       console.log(error)
