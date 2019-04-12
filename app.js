@@ -300,8 +300,40 @@ app.get('/zzitems', (req, res, next) => {
     }
   });
 });
-app.get('/inbids', (req, res, next) => {res.send(`hello`)});
-app.get('/outbids', (req, res, next) => {res.send(`hello`)});
+app.get('/inbids', (req, res, next) => {
+  var rid = req.query['rid'];
+  var borrower_id = req.query['uid'];
+  var bid_price = req.query['borrower_price'];
+  var bid_comments = req.query['borrower_comments'];
+  var return_date = req.query['return_date'];
+  db.query(`INSERT INTO
+    bids (rid, borrower_id, bid_price, bid_comments, return_date)
+    VALUES ($1, $2, $3, $4, $5)`,
+    [rid, borrower_id, bid_price, bid_comments, return_date],
+    (err, data) => {
+      if (!err) {
+        res.json({ status: "success" });
+      } else {
+        res.json({ status: "failure" });
+      }
+    }
+  );
+  // res.json(req.query);
+});
+app.get('/outbids', (req, res, next) => {
+  var rid = req.query['rid'];
+  var bid = req.query['bid'];
+  db.query(`UPDATE rounds SET winning_bid_id=$1 WHERE rid=$2`,
+    [bid, rid],
+    (err, data) => {
+      if (!err) {
+        res.json({ status: "success" });
+      } else {
+        res.json({ status: "failure" });
+      }
+    }
+  );
+});
 
 
 // catch 404 and forward to error handler

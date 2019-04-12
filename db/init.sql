@@ -1,25 +1,25 @@
 ﻿-- helper function that drops all tables in the current database (commented out for safety)
--- DO $$ DECLARE
---   r RECORD;
--- BEGIN
---   FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) LOOP
---     EXECUTE 'DROP TABLE ' || quote_ident(r.tablename) || ' CASCADE';
---   END LOOP;
--- END $$;
+DO $$ DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) LOOP
+    EXECUTE 'DROP TABLE ' || quote_ident(r.tablename) || ' CASCADE';
+  END LOOP;
+END $$;
 
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS admins CASCADE;
-DROP TABLE IF EXISTS items CASCADE;
-DROP TABLE IF EXISTS rounds CASCADE;
-DROP TABLE IF EXISTS bids CASCADE;
-DROP TABLE IF EXISTS user_following CASCADE;
-DROP TABLE IF EXISTS item_review CASCADE;
-DROP TABLE IF EXISTS borrower_review CASCADE;
-DROP TABLE IF EXISTS lender_review CASCADE;
-DROP TABLE IF EXISTS wishlist CASCADE;
-DROP TABLE IF EXISTS item_categories CASCADE;
-DROP TABLE IF EXISTS tasks CASCADE;
-DROP TABLE IF EXISTS user_tasks CASCADE;
+-- DROP TABLE IF EXISTS users CASCADE;
+-- DROP TABLE IF EXISTS admins CASCADE;
+-- DROP TABLE IF EXISTS items CASCADE;
+-- DROP TABLE IF EXISTS rounds CASCADE;
+-- DROP TABLE IF EXISTS bids CASCADE;
+-- DROP TABLE IF EXISTS user_following CASCADE;
+-- DROP TABLE IF EXISTS item_review CASCADE;
+-- DROP TABLE IF EXISTS borrower_review CASCADE;
+-- DROP TABLE IF EXISTS lender_review CASCADE;
+-- DROP TABLE IF EXISTS wishlist CASCADE;
+-- DROP TABLE IF EXISTS item_categories CASCADE;
+-- DROP TABLE IF EXISTS tasks CASCADE;
+-- DROP TABLE IF EXISTS user_tasks CASCADE;
 
 DROP EXTENSION IF EXISTS citext;
 CREATE EXTENSION citext;
@@ -40,9 +40,9 @@ CREATE TABLE admins (
 );
 
 /*current_round point to current/latest bidding round
-	check current_round with rounds to see winning bid 
+	check current_round with rounds to see winning bid
 	(and then bids table for winning borrower)
-	
+
 	available will have 3 states
 	true: available
 	false: on loan
@@ -148,12 +148,12 @@ CREATE TABLE user_tasks (
 -- CREATE OR REPLACE FUNCTION update_changetimestamp_column()
 -- RETURNS TRIGGER AS $$
 -- BEGIN
---     NEW.changetimestamp = now(); 
+--     NEW.changetimestamp = now();
 --     RETURN NEW;
 -- END;
 -- $$ language 'plpgsql';
 -- CREATE TRIGGER update_ab_changetimestamp BEFORE UPDATE
--- ON ab FOR EACH ROW EXECUTE PROCEDURE 
+-- ON ab FOR EACH ROW EXECUTE PROCEDURE
 -- update_changetimestamp_column();
 --
 -- CREATE OR REPLACE FUNCTION trigger_set_timestamp()
@@ -230,30 +230,29 @@ FOR EACH ROW
 EXECUTE PROCEDURE trig_add_to_wishlist_func();
 
 -- Trigger 1: Borrower banned from bidding if his/her rating is 0 < rating < 2
-CREATE OR REPLACE FUNCTION trig_borrower_bid_ban()
-RETURNS TRIGGER AS
-$$
-    BEGIN
-        IF AVG(rating) > 0 AND AVG(rating) < 2 THEN
-        	RAISE NOTICE 'You have a cumulative rating score that is lower than 2. You are banned from bidding.';
-        RETURN NULL;
-    END;
-$$
-LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS trig_borrower_bid_ban;
-
-CREATE TRIGGER trig_borrower_bid_ban
-BEFORE INSERT ON borrower_review
-FOR EACH ROW
-EXECUTE PROCEDURE trig_borrower_bid_ban();
+-- CREATE OR REPLACE FUNCTION trig_borrower_bid_ban_func()
+-- RETURNS TRIGGER AS
+-- $$
+--     BEGIN
+--         IF AVG(rating) > 0 AND AVG(rating) < 2 THEN
+--         	RAISE NOTICE 'You have a cumulative rating score that is lower than 2. You are banned from bidding.';
+--         RETURN NULL;
+--     END;
+-- $$
+-- LANGUAGE plpgsql;
+--
+-- DROP TRIGGER IF EXISTS trig_borrower_bid_ban;
+--
+-- CREATE TRIGGER trig_borrower_bid_ban
+-- BEFORE INSERT ON borrower_review
+-- FOR EACH ROW
+-- EXECUTE PROCEDURE trig_borrower_bid_ban();
 
 -- Trigger 2: User cannot add their own items to their wishlist
-
 CREATE OR REPLACE FUNCTION trig_wishlist_fav_own_item_func()
 RETURNS TRIGGER AS $$
-DECLARE 
-	lender_uid integer;	
+DECLARE
+	lender_uid integer;
 BEGIN
 	SELECT items.lender_id into lender_uid from items where iid = NEW.iid;
 	IF NEW.uid = lender_uid THEN
@@ -271,3 +270,30 @@ CREATE TRIGGER trig_wishlist_fav_own_item
 BEFORE INSERT ON wishlist
 FOR EACH ROW
 EXECUTE PROCEDURE trig_wishlist_fav_own_item_func();
+
+-- Trigger 3: If an item's winning_bid_id for its latest round has not been set yet, prevent any more rounds from being created for that item
+-- CREATE OR REPLACE FUNCTION trig_rounds_one_current_round_only_func()
+-- RETURNS TRIGGER AS $$
+-- DECLARE
+-- 	item_latest_round integer;
+-- 	winning_bid_id integer;
+-- BEGIN
+-- 	SELECT MAX(rounds.rid) into item_latest_round from rounds where rounds.iid = NEW.iid;
+-- 	RAISE NOTICE 'item_latest_round: %)', item_latest_round;
+-- 	SELECT rounds.winning_bid_id into winning_bid_id from rounds where rounds.rid = item_latest_round;
+-- 	RAISE NOTICE 'winning_bid_id: %)', winning_bid_id;
+-- 	IF winning_bid_id IS NULL THEN
+-- 		RAISE EXCEPTION 'latest round for item has not been concluded yet';
+-- 		RETURN NULL;
+-- 	ELSE
+-- 		RETURN NEW;
+-- 	END IF;
+-- END
+-- $$ LANGUAGE plpgsql;
+--
+-- DROP TRIGGER IF EXISTS trig_rounds_one_current_round_only ON rounds;
+--
+-- CREATE TRIGGER trig_rounds_one_current_round_only
+-- BEFORE INSERT ON rounds
+-- FOR EACH ROW
+-- EXECUTE PROCEDURE trig_rounds_one_current_round_only_func();
