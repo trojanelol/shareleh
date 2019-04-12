@@ -7,7 +7,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('../../db');
 
 /* POST Upload an item. */
-router.get('/add', function(req, res, next) {
+router.get('/', function(req, res, next) {
 
     //Compulsory parameters
     let uid = req.query.uid;
