@@ -7,10 +7,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('../../db');
 
 /* POST Upload an item. */
-router.post('/', function(req, res, next) {
+router.get('/', function(req, res, next) {
 
     //Compulsory parameters
-    let uid = req.user.uid;
+    let uid = req.query.uid;
     if (uid === undefined) {
         return res.status(400).json({
             success: false,
@@ -20,7 +20,7 @@ router.post('/', function(req, res, next) {
     }
 
     //Get item id to add to wishlist
-    let iid = req.body.iid;
+    let iid = req.query.iid;
     if (iid === undefined) {
         return res.status(400).json({
             success: false,
@@ -33,16 +33,16 @@ router.post('/', function(req, res, next) {
         [uid, iid],
         (err, data) => {
             if (err) {
-                console.log(err)
+                console.log(err.stack)
                 return res.status(500).json({
                     success: false,
                     message: "Error adding item to wishlist",
                     data: null
                 });
+
             }
 
-            console.log(data)
-
+            //Successful
             return res.status(200).json({
                 success: true,
                 message: "Successfully added item to wishlist",

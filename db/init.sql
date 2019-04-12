@@ -247,3 +247,27 @@ CREATE TRIGGER trig_borrower_bid_ban
 BEFORE INSERT ON borrower_review
 FOR EACH ROW
 EXECUTE PROCEDURE trig_borrower_bid_ban();
+
+-- Trigger 2: User cannot add their own items to their wishlist
+
+CREATE OR REPLACE FUNCTION trig_wishlist_fav_own_item_func()
+RETURNS TRIGGER AS $$
+DECLARE 
+	lender_uid integer;	
+BEGIN
+	SELECT items.lender_id into lender_uid from items where iid = NEW.iid;
+	IF NEW.uid = lender_uid THEN
+		RAISE EXCEPTION 'Cannot add own items to wishlist';
+		RETURN NULL;
+	ELSE
+		RETURN NEW;
+	END IF;
+END
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trig_wishlist_fav_own_item ON wishlist;
+
+CREATE TRIGGER trig_wishlist_fav_own_item
+BEFORE INSERT ON wishlist
+FOR EACH ROW
+EXECUTE PROCEDURE trig_wishlist_fav_own_item_func();
