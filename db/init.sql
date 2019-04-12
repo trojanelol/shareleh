@@ -238,9 +238,7 @@ $$
             SELECT BR.reviewer_id, BR.rating, B.borrower
             FROM borrower_review BR INNER JOIN bids B ON B.brid = BR.brid 
             GROUP BY BR.reviewer_id
-        ) IF (AVG(borrowers_bids.rating) < 2) THEN 
-            RETURN NULL;
-        END IF;
+        )
     END;
 $$
 LANGUAGE plpgsql;
