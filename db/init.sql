@@ -1,4 +1,4 @@
--- helper function that drops all tables in the current database (commented out for safety)
+﻿-- helper function that drops all tables in the current database (commented out for safety)
 -- DO $$ DECLARE
 --   r RECORD;
 -- BEGIN
@@ -236,10 +236,11 @@ $$
     BEGIN
         with borrowers_bids AS (
             SELECT BR.reviewer_id, BR.rating, B.borrower
-            FROM borrower_review BR NATURAL JOIN bids 
+            FROM borrower_review BR INNER JOIN bids B ON B.brid = BR.brid 
             GROUP BY BR.reviewer_id
-        ) SELECT * FROM borrowers_bids WHERE AVG(rating) < 2;
-    RETURN NULL;
+        ) IF (AVG(borrowers_bids.rating) < 2) THEN 
+            RETURN NULL;
+        END IF;
     END;
 $$
 LANGUAGE plpgsql;
