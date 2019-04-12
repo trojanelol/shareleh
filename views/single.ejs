@@ -126,6 +126,7 @@
 													<% }else{%>
 														<p>Bidding Status: <b>No Bidding Yet</b><br></p>
 													<% } %>
+													<% if(item.bidding_info.bidding_status != "Accepted" ) {%>
 													<form action="/postbid" method="post">
 														<div class="">Return date:
 															<input type="date" name="return_date" placeholder="Your Return Date" required="">
@@ -146,6 +147,7 @@
 															<p></p>
 														</div>
 													</form>
+													<% } %>
  													<% } else{ %>
 														<% if(item.bidding_info.bids != ''){ %>
 															<form action="/choosebid" method="post">

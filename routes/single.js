@@ -25,6 +25,7 @@ router.get('/', function(req, res, next) {
 
   request(itemsURL, function (error, response, body) {
     if (!error) {
+      // res.json(JSON.parse(body));
       let data = JSON.parse(body) // Print the google web page.
       res.render('single', {item: data, img: "s1.png", iid: req.query['iid']});
     }else{

@@ -252,11 +252,13 @@ app.post('/postbid', function(req, res, next) {
     VALUES ($1, $2, $3, $4, $5)`,
     [rid, borrower_id, bid_price, bid_comments, return_date],
     (err, data) => {
+      console.log(`INSERT INTO bids (rid, borrower_id, bid_price, bid_comments, return_date) 
+      VALUES (${rid}, ${borrower_id}, ${bid_price}, ${bid_comments}, ${return_date})`);
       if (!err) {
         // res.redirect(`/`);
         res.send(`<pre>Successfully bidded! <a href="javascript:history.go(-1)">Go Back.</a></pre>`);
       } else {
-        res.json({ status: "failure" });
+        res.send(err.stack);
       }
     }
   );
@@ -289,6 +291,16 @@ app.post('/choosebid', function(req, res, next) {
     }
   });
 });
+app.get('/coolstats', (req, res, next) => {
+  db.query(`SELECT location, ((COUNT(*) * 100)/(select count(*) from items)) AS percentage 
+  FROM items GROUP BY location ORDER BY location;`, (err, data) => {
+    if (!err) {
+      res.json(data.rows);
+    } else {
+      res.send(err.stack);
+    }
+  });
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
